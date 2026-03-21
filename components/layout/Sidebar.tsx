@@ -7,10 +7,7 @@ import {
   LayoutDashboard,
   BookOpen,
   UtensilsCrossed,
-  Settings,
-  ShoppingBasket,
-  ScanLine,
-  Heart,
+  User,
   ChevronDown,
 } from "lucide-react";
 import { Avatar } from "@/components/ui";
@@ -112,56 +109,47 @@ export default function Sidebar({ userName = "", userEmail = "" }: SidebarProps)
             label="My Cookbook"
             href="/home/cookbook"
           />
-          <SidebarItem
-            icon={<Settings size={18} />}
-            label="Settings"
-            href="/home/settings"
-          />
-
-          {/* Quick Access Divider */}
-          <div className="mt-6 mb-2 px-3">
-            <span className="text-[10px] font-semibold text-[var(--color-neutral-400)] uppercase tracking-wider">
-              Quick Access
-            </span>
-          </div>
-
-          <SidebarItem
-            icon={<ShoppingBasket size={18} />}
-            label="My Pantry"
-            href="/home/pantry"
-          />
-          <SidebarItem
-            icon={<ScanLine size={18} />}
-            label="Recent Scans"
-            href="/home/scans"
-          />
-          <SidebarItem
-            icon={<Heart size={18} />}
-            label="Favorites"
-            href="/home/favorites"
-          />
         </nav>
       </div>
 
-      {/* User Profile */}
-      <div
-        className="
-          flex items-center gap-3
-          px-2 py-3 rounded-[var(--radius-xl)]
-          hover:bg-[var(--color-neutral-50)]
-          cursor-pointer transition-colors duration-[var(--transition-base)]
-        "
-      >
-        <Avatar initials={initials} />
-        <div className="flex-1 min-w-0">
-          <p className="text-[var(--text-base)] font-semibold text-[var(--color-neutral-900)] truncate">
-            {displayName}
-          </p>
-          <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)]">
-            Pro Member
-          </p>
+      {/* Bottom: profile + settings */}
+      <div className="flex items-center gap-2">
+        {/* Profile chip */}
+        <div
+          className="
+            flex items-center gap-2.5 flex-1 min-w-0
+            px-2 py-2.5 rounded-[var(--radius-xl)]
+            hover:bg-[var(--color-neutral-50)]
+            cursor-pointer transition-colors duration-[var(--transition-base)]
+          "
+        >
+          <Avatar initials={initials} />
+          <div className="flex-1 min-w-0">
+            <p className="text-[var(--text-base)] font-semibold text-[var(--color-neutral-900)] truncate">
+              {displayName}
+            </p>
+            <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)]">
+              Pro Member
+            </p>
+          </div>
+          <ChevronDown size={13} className="text-[var(--color-neutral-400)] shrink-0" />
         </div>
-        <ChevronDown size={14} className="text-[var(--color-neutral-400)]" />
+
+        {/* Account icon button */}
+        <Link
+          href="/home/account"
+          title="Account"
+          className="
+            w-9 h-9 flex-shrink-0 flex items-center justify-center
+            rounded-[var(--radius-xl)]
+            text-[var(--color-neutral-400)]
+            hover:bg-[var(--color-neutral-50)]
+            hover:text-[var(--color-neutral-700)]
+            transition-colors duration-[var(--transition-base)]
+          "
+        >
+          <User size={17} />
+        </Link>
       </div>
     </aside>
   );

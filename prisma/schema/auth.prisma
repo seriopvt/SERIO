@@ -8,6 +8,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   savedRecipes  SavedRecipe[]
+  activityLogs  ActivityLog[]
 }
 
 model Account {

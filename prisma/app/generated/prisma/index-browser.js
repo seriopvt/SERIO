@@ -157,6 +157,21 @@ exports.Prisma.VerificationTokenScalarFieldEnum = {
   expires: 'expires'
 };
 
+exports.Prisma.ChefTipScalarFieldEnum = {
+  id: 'id',
+  tip: 'tip',
+  author: 'author',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ActivityLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  date: 'date',
+  action: 'action',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.RecipeScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -208,6 +223,8 @@ exports.Prisma.ModelName = {
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
+  ChefTip: 'ChefTip',
+  ActivityLog: 'ActivityLog',
   Recipe: 'Recipe',
   SavedRecipe: 'SavedRecipe'
 };

@@ -1,0 +1,24 @@
+// Chef's tips — rotated daily
+model ChefTip {
+  id        Int      @id @default(autoincrement())
+  tip       String   @db.Text
+  author    String?  @db.VarChar(120)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@map("chef_tips")
+}
+
+// One row per user per calendar day they interacted with the app
+// (search, generate, save — any of these counts as "active")
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  date      DateTime @map("date") @db.Date // stored as date only
+  action    String   @db.VarChar(50)       // "search" | "generate" | "save"
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // One activity per user per day per action type is fine; we just need dates for streak
+  @@map("activity_logs")
+}

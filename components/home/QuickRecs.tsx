@@ -1,89 +1,159 @@
 "use client";
 
-import React from "react";
-import Image from "next/image";
-import { RefreshCw } from "lucide-react";
-import { Card, ProgressBar } from "@/components/ui";
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { RefreshCw, Clock, Flame, Leaf, UtensilsCrossed } from "lucide-react";
+import { Card } from "@/components/ui";
 
-interface QuickRecItemData {
-  image: string;
-  title: string;
-  subtitle: string;
-  match: number;
+interface QuickRec {
+  id: number;
+  name: string;
+  difficulty?: string | null;
+  time?: number | null;
+  spiceLevel?: string;
+  isVegan?: boolean;
+  category?: string;
 }
 
-const QUICK_RECS: QuickRecItemData[] = [
-  {
-    image: "/images/awaze-tibs.png",
-    title: "Awaze Tibs",
-    subtitle: "Based on your pantry",
-    match: 95,
-  },
-  {
-    image: "/images/atkilt-wot.png",
-    title: "Atkilt Wot",
-    subtitle: "Use your carrots",
-    match: 88,
-  },
-  {
-    image: "/images/timatim-salata.png",
-    title: "Timatim Salata",
-    subtitle: "Quick & Light",
-    match: 82,
-  },
+const SPICE_COLORS: Record<string, string> = {
+  mild: "#22c55e",
+  medium: "#f59e0b",
+  hot: "#f97316",
+  "extra-hot": "#ef4444",
+};
+
+const MOTIFS = ["🍲", "🌿", "🫘", "🌶️", "🧅", "🥘"];
+const GRADIENTS = [
+  ["#fff7ed", "#fef3c7"],
+  ["#fff1f2", "#fff7ed"],
+  ["#f0fdf4", "#fefce8"],
+  ["#fef9c3", "#fff7ed"],
 ];
 
-function QuickRecItem({ image, title, subtitle, match }: QuickRecItemData) {
+function RecItem({ rec }: { rec: QuickRec }) {
+  const spiceColor = SPICE_COLORS[rec.spiceLevel ?? "medium"] ?? SPICE_COLORS.medium;
+  const motif = MOTIFS[rec.id % MOTIFS.length];
+  const [g1, g2] = GRADIENTS[rec.id % GRADIENTS.length];
+
   return (
-    <div
+    <Link
+      href={`/home/recipes/${rec.id}`}
       className="
-        flex items-center gap-3 mb-3
-        p-2 rounded-[var(--radius-xl)]
+        flex items-center gap-3 p-2.5
+        rounded-[var(--radius-xl)]
         hover:bg-[var(--color-neutral-50)]
         transition-colors duration-[var(--transition-base)]
-        cursor-pointer
+        group
       "
     >
-      <div className="w-12 h-12 rounded-[var(--radius-xl)] overflow-hidden flex-shrink-0 relative">
-        <Image src={image} alt={title} fill className="object-cover" />
+      {/* Mini illustration */}
+      <div
+        className="w-11 h-11 rounded-[var(--radius-lg)] flex-shrink-0 flex items-center justify-center relative overflow-hidden"
+        style={{ background: `linear-gradient(135deg, ${g1}, ${g2})` }}
+      >
+        <span className="text-xl select-none">{motif}</span>
       </div>
+
       <div className="flex-1 min-w-0">
-        <p className="text-[var(--text-base)] font-semibold text-[var(--color-neutral-900)]">
-          {title}
+        <p className="text-[var(--text-base)] font-semibold text-[var(--color-neutral-900)] truncate group-hover:text-[var(--color-brand-primary)] transition-colors">
+          {rec.name}
         </p>
-        <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] truncate">
-          {subtitle}
-        </p>
-        <div className="flex items-center gap-1.5 mt-0.5">
-          <ProgressBar value={match} />
-          <span className="text-[10px] font-semibold text-[var(--color-brand-primary)]">
-            {match}% Match
+        <div className="flex items-center gap-2 mt-0.5">
+          {rec.time && (
+            <span className="flex items-center gap-0.5 text-[11px] text-[var(--color-neutral-400)]">
+              <Clock size={10} />
+              {rec.time}m
+            </span>
+          )}
+          {rec.isVegan && (
+            <span className="flex items-center gap-0.5 text-[11px] text-green-500 font-medium">
+              <Leaf size={10} fill="currentColor" />
+              Vegan
+            </span>
+          )}
+          <span
+            className="flex items-center gap-0.5 text-[11px] font-semibold ml-auto"
+            style={{ color: spiceColor }}
+          >
+            <Flame size={10} fill="currentColor" />
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
 export default function QuickRecs() {
+  const [recs, setRecs] = useState<QuickRec[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [spinning, setSpinning] = useState(false);
+
+  const fetchRecs = async () => {
+    setSpinning(true);
+    try {
+      const res = await fetch("/api/recipes/random?count=3");
+      const data = await res.json();
+      setRecs(data.results ?? []);
+    } catch {
+      // silently fail
+    } finally {
+      setLoading(false);
+      setTimeout(() => setSpinning(false), 400);
+    }
+  };
+
+  useEffect(() => { fetchRecs(); }, []);
+
   return (
     <Card>
-      <div className="flex items-center justify-between mb-4">
-        <h4 className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
-          Quick Recs
-        </h4>
-        <button className="text-[var(--color-brand-primary)] hover:rotate-180 transition-transform duration-[var(--transition-slow)] cursor-pointer">
-          <RefreshCw size={16} />
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <UtensilsCrossed size={15} className="text-[var(--color-brand-primary)]" />
+          <h4 className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
+            Quick Recs
+          </h4>
+        </div>
+        <button
+          onClick={fetchRecs}
+          disabled={spinning}
+          className="text-[var(--color-brand-primary)] hover:opacity-70 transition-opacity cursor-pointer disabled:opacity-40"
+          aria-label="Refresh suggestions"
+        >
+          <RefreshCw
+            size={14}
+            className={spinning ? "animate-spin" : ""}
+          />
         </button>
       </div>
 
-      {QUICK_RECS.map((item) => (
-        <QuickRecItem key={item.title} {...item} />
-      ))}
+      {loading ? (
+        <div className="space-y-2.5 animate-pulse">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center gap-3 p-2.5">
+              <div className="w-11 h-11 rounded-[var(--radius-lg)] bg-[var(--color-neutral-100)] shrink-0" />
+              <div className="flex-1 space-y-1.5">
+                <div className="h-3.5 bg-[var(--color-neutral-100)] rounded w-3/4" />
+                <div className="h-2.5 bg-[var(--color-neutral-100)] rounded w-1/2" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : recs.length === 0 ? (
+        <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] text-center py-4">
+          No recipes found
+        </p>
+      ) : (
+        <div className="space-y-0.5">
+          {recs.map((rec) => <RecItem key={rec.id} rec={rec} />)}
+        </div>
+      )}
 
-      <button className="w-full text-center text-[var(--text-base)] font-semibold text-[var(--color-neutral-500)] mt-3 py-2 hover:text-[var(--color-brand-primary)] transition-colors cursor-pointer">
-        View Full List
-      </button>
+      <Link
+        href="/home/recipes"
+        className="block w-full text-center text-[var(--text-sm)] font-semibold text-[var(--color-neutral-500)] mt-3 pt-3 border-t border-[var(--color-neutral-100)] hover:text-[var(--color-brand-primary)] transition-colors"
+      >
+        Browse all recipes →
+      </Link>
     </Card>
   );
 }

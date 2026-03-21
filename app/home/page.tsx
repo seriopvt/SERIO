@@ -21,7 +21,7 @@ export default function HomePage() {
       <div className="w-[260px] flex-shrink-0 flex flex-col gap-6">
         <QuickRecs />
         <ChefSecret />
-        <CookingStreak days={3} goal={7} />
+        <CookingStreak />
       </div>
     </div>
   );
