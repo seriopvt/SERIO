@@ -1,4 +1,6 @@
 export { default as PantrySearch } from "./PantrySearch";
+export { default as RecipeGenerator } from "./RecipeGenerator";
+export { default as RecipeSearch } from "./RecipeSearch";
 export { default as SeasonalFavorites } from "./SeasonalFavorites";
 export { default as RecipeCard } from "./RecipeCard";
 export { default as QuickRecs } from "./QuickRecs";

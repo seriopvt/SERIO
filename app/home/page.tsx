@@ -1,5 +1,6 @@
 import {
-  PantrySearch,
+  RecipeGenerator,
+  RecipeSearch,
   SeasonalFavorites,
   QuickRecs,
   ChefSecret,
@@ -19,7 +20,8 @@ export default async function HomePage() {
     <div className="flex gap-6">
       {/* Left Column — Main Content */}
       <div className="flex-1 min-w-0">
-        <PantrySearch />
+        <RecipeSearch />
+        <RecipeGenerator />
         <SeasonalFavorites />
       </div>
 

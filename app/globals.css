@@ -116,6 +116,10 @@
 }
 
 /* ---- Base Styles ---- */
+html {
+  font-size: 73%; /* ~11.7px base — 10% smaller than previous 81.25% */
+}
+
 body {
   background: var(--color-surface-page);
   color: var(--color-neutral-900);
