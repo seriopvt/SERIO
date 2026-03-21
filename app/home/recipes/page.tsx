@@ -1,11 +1,23 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import RecipeCatalogCard, { RecipeCatalogCardProps } from "@/components/recipes/RecipeCatalogCard";
 import FilterBar from "@/components/recipes/FilterBar";
 import { BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
+
+const SKELETON_GRADIENTS = [
+  ["#fff7ed", "#fef3c7"],
+  ["#fff1f2", "#fff7ed"],
+  ["#fef9c3", "#fff7ed"],
+  ["#f0fdf4", "#fefce8"],
+  ["#fff5f5", "#fff1f2"],
+  ["#fff8f0", "#fef3c7"],
+  ["#fef3c7", "#fff7ed"],
+  ["#fff7ed", "#fefce8"],
+  ["#fff1f2", "#fef9c3"],
+];
 
 interface PaginatedRecipe extends Omit<RecipeCatalogCardProps, "onSave" | "onUnsave" | "saveLoading" | "isSaved"> {}
 
@@ -69,22 +81,31 @@ function RecipeGrid() {
   if (loading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i} className="bg-white rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden animate-pulse">
-            <div className="h-2 bg-[var(--color-neutral-100)]" />
-            <div className="p-5 space-y-3">
-              <div className="h-3 w-24 bg-[var(--color-neutral-100)] rounded-full" />
-              <div className="h-5 w-3/4 bg-[var(--color-neutral-100)] rounded" />
-              <div className="h-3 w-full bg-[var(--color-neutral-100)] rounded" />
-              <div className="h-3 w-2/3 bg-[var(--color-neutral-100)] rounded" />
-              <div className="h-px bg-[var(--color-neutral-100)] mt-4" />
-              <div className="flex gap-2 pt-1">
-                <div className="h-5 w-16 bg-[var(--color-neutral-100)] rounded-full" />
-                <div className="h-5 w-14 bg-[var(--color-neutral-100)] rounded-full" />
+        {Array.from({ length: 9 }).map((_, i) => {
+          const [g1, g2] = SKELETON_GRADIENTS[i % SKELETON_GRADIENTS.length];
+          return (
+            <div key={i} className="bg-white rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden animate-pulse">
+              <div
+                className="h-[140px]"
+                style={{ background: `linear-gradient(135deg, ${g1}, ${g2})` }}
+              />
+              <div className="p-5 space-y-3">
+                <div className="h-3 w-20 bg-[var(--color-neutral-100)] rounded-full" />
+                <div className="h-5 w-3/4 bg-[var(--color-neutral-100)] rounded" />
+                <div className="flex gap-1.5">
+                  <div className="h-5 w-16 bg-[var(--color-neutral-100)] rounded-full" />
+                  <div className="h-5 w-14 bg-[var(--color-neutral-100)] rounded-full" />
+                  <div className="h-5 w-12 bg-[var(--color-neutral-100)] rounded-full" />
+                </div>
+                <div className="h-px bg-[var(--color-neutral-100)] mt-2" />
+                <div className="flex gap-2 pt-1">
+                  <div className="h-4 w-14 bg-[var(--color-neutral-100)] rounded-full" />
+                  <div className="h-4 w-12 bg-[var(--color-neutral-100)] rounded-full" />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     );
   }

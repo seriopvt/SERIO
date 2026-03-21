@@ -90,7 +90,10 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (err) {
-    console.error("[GET /api/recipes] Error:", err);
+    const error = err as { message?: string; meta?: unknown };
+    console.error("[GET /api/recipes] message:", error?.message);
+    console.error("[GET /api/recipes] meta:", error?.meta);
+    console.error("[GET /api/recipes] full:", err);
     return NextResponse.json({ error: "Failed to fetch recipes" }, { status: 500 });
   }
 }

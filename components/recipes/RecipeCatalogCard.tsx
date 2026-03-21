@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Clock, Flame, Leaf, ChefHat, Bookmark, BookmarkCheck, Loader2, Users } from "lucide-react";
+import { Clock, Flame, Leaf, Bookmark, BookmarkCheck, Loader2, Users, ArrowRight } from "lucide-react";
 
 export interface RecipeCatalogCardProps {
   id: number;
@@ -17,24 +17,36 @@ export interface RecipeCatalogCardProps {
   category?: string;
   region?: string;
   time?: number | null;
-  // Cookbook variant
   isSaved?: boolean;
   onSave?: (id: number) => void;
   onUnsave?: (id: number) => void;
   saveLoading?: boolean;
 }
 
-const SPICE_CONFIG: Record<string, { label: string; color: string; flames: number }> = {
-  mild: { label: "Mild", color: "var(--color-accent-green)", flames: 1 },
-  medium: { label: "Medium", color: "var(--color-accent-amber)", flames: 2 },
-  hot: { label: "Hot", color: "var(--color-accent-orange)", flames: 3 },
-  "extra-hot": { label: "Extra Hot", color: "var(--color-accent-red)", flames: 4 },
+const SPICE_CONFIG: Record<string, { label: string; color: string; bg: string; flames: number }> = {
+  mild:        { label: "Mild",       color: "#22c55e", bg: "rgba(34,197,94,0.12)",    flames: 1 },
+  medium:      { label: "Medium",     color: "#f59e0b", bg: "rgba(245,158,11,0.12)",   flames: 2 },
+  hot:         { label: "Hot",        color: "#f97316", bg: "rgba(249,115,22,0.12)",   flames: 3 },
+  "extra-hot": { label: "Extra Hot",  color: "#ef4444", bg: "rgba(239,68,68,0.12)",    flames: 4 },
 };
 
-const DIFFICULTY_COLORS: Record<string, string> = {
-  easy: "bg-green-50 text-green-600",
-  medium: "bg-amber-50 text-amber-600",
-  hard: "bg-red-50 text-red-600",
+// Deterministic pastel gradient per recipe id
+const CARD_GRADIENTS = [
+  "from-orange-50 via-amber-50 to-yellow-50",
+  "from-rose-50 via-orange-50 to-amber-50",
+  "from-amber-50 via-orange-50 to-red-50",
+  "from-yellow-50 via-lime-50 to-green-50",
+  "from-red-50 via-rose-50 to-orange-50",
+  "from-orange-50 via-red-50 to-rose-50",
+];
+
+// Ethiopian-themed emoji motifs shown as decorative art
+const CARD_MOTIFS = ["🍲", "🌿", "🫘", "🌶️", "🧅", "🥘"];
+
+const DIFFICULTY_STYLE: Record<string, { dot: string; text: string }> = {
+  easy:   { dot: "#22c55e", text: "Easy" },
+  medium: { dot: "#f59e0b", text: "Medium" },
+  hard:   { dot: "#ef4444", text: "Hard" },
 };
 
 export default function RecipeCatalogCard({
@@ -56,8 +68,10 @@ export default function RecipeCatalogCard({
 }: RecipeCatalogCardProps) {
   const spice = SPICE_CONFIG[spiceLevel] ?? SPICE_CONFIG.medium;
   const diffKey = (difficulty ?? "").toLowerCase();
-  const diffColor = DIFFICULTY_COLORS[diffKey] ?? "bg-[var(--color-neutral-100)] text-[var(--color-neutral-500)]";
+  const diff = DIFFICULTY_STYLE[diffKey];
   const displayTime = time ? `${time} min` : cookTime ?? prepTime ?? null;
+  const gradientClass = CARD_GRADIENTS[id % CARD_GRADIENTS.length];
+  const motif = CARD_MOTIFS[id % CARD_MOTIFS.length];
 
   const handleBookmark = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -68,109 +82,157 @@ export default function RecipeCatalogCard({
   };
 
   return (
-    <Link href={`/home/recipes/${id}`} className="group block">
+    <Link href={`/home/recipes/${id}`} className="group block h-full">
       <div
         className="
-          bg-[var(--color-surface-card)]
-          rounded-[var(--radius-2xl)]
+          relative h-full flex flex-col
+          bg-white rounded-[var(--radius-2xl)]
           border border-[var(--color-neutral-100)]
           shadow-[var(--shadow-sm)]
-          hover:shadow-[var(--shadow-md)]
-          transition-all duration-[var(--transition-base)]
+          hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)]
+          hover:-translate-y-1
+          transition-all duration-300
           overflow-hidden
-          h-full flex flex-col
         "
       >
-        {/* Colored header strip */}
-        <div
-          className="h-2 w-full"
-          style={{
-            background: `linear-gradient(to right, color-mix(in srgb, ${spice.color} 40%, white), color-mix(in srgb, ${spice.color} 20%, white))`,
-          }}
-        />
-
-        <div className="p-5 flex flex-col flex-1">
-          {/* Top row: category + bookmark */}
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex flex-wrap gap-1.5">
-              {category && (
-                <span className="text-[var(--text-xs)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider">
-                  {category}
-                </span>
-              )}
-            </div>
-            {(onSave || onUnsave) && (
-              <button
-                onClick={handleBookmark}
-                disabled={saveLoading}
-                aria-label={isSaved ? "Remove from cookbook" : "Save to cookbook"}
-                className="
-                  w-7 h-7 flex items-center justify-center rounded-full
-                  hover:bg-[var(--color-neutral-100)]
-                  transition-colors duration-[var(--transition-fast)]
-                  cursor-pointer disabled:opacity-50
-                "
-              >
-                {saveLoading ? (
-                  <Loader2 size={14} className="animate-spin text-[var(--color-brand-primary)]" />
-                ) : isSaved ? (
-                  <BookmarkCheck size={14} className="text-[var(--color-brand-primary)]" />
-                ) : (
-                  <Bookmark size={14} className="text-[var(--color-neutral-400)] group-hover:text-[var(--color-neutral-600)]" />
-                )}
-              </button>
-            )}
+        {/* ── Illustration Area ── */}
+        <div className={`relative h-[140px] bg-gradient-to-br ${gradientClass} overflow-hidden flex-shrink-0`}>
+          {/* Decorative rings */}
+          <div
+            className="absolute -top-6 -right-6 w-28 h-28 rounded-full opacity-20"
+            style={{ background: spice.color }}
+          />
+          <div
+            className="absolute -bottom-8 -left-4 w-20 h-20 rounded-full opacity-10"
+            style={{ background: spice.color }}
+          />
+          {/* Motif emoji */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="text-6xl opacity-25 group-hover:opacity-40 group-hover:scale-110 transition-all duration-500 select-none">
+              {motif}
+            </span>
           </div>
+          {/* Category pill */}
+          {category && (
+            <div className="absolute top-3 left-3">
+              <span
+                className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider"
+                style={{ background: spice.bg, color: spice.color }}
+              >
+                {category}
+              </span>
+            </div>
+          )}
+          {/* Bookmark button */}
+          {(onSave || onUnsave) && (
+            <button
+              onClick={handleBookmark}
+              disabled={saveLoading}
+              aria-label={isSaved ? "Remove from cookbook" : "Save to cookbook"}
+              className="
+                absolute top-3 right-3
+                w-8 h-8 flex items-center justify-center
+                rounded-full bg-white/90 backdrop-blur-sm
+                shadow-[var(--shadow-sm)]
+                hover:bg-white hover:scale-110
+                transition-all duration-200
+                cursor-pointer disabled:opacity-50
+              "
+            >
+              {saveLoading ? (
+                <Loader2 size={13} className="animate-spin text-[var(--color-brand-primary)]" />
+              ) : isSaved ? (
+                <BookmarkCheck size={13} className="text-[var(--color-brand-primary)]" fill="currentColor" />
+              ) : (
+                <Bookmark size={13} className="text-[var(--color-neutral-400)] group-hover:text-[var(--color-neutral-700)]" />
+              )}
+            </button>
+          )}
+          {/* Spice flames */}
+          <div
+            className="absolute bottom-3 right-3 flex items-center gap-0.5"
+            style={{ color: spice.color }}
+          >
+            {Array.from({ length: spice.flames }).map((_, i) => (
+              <Flame key={i} size={12} fill="currentColor" className="opacity-80" />
+            ))}
+          </div>
+        </div>
 
-          {/* Recipe name */}
-          <h3 className="font-bold text-[var(--text-md)] text-[var(--color-neutral-900)] leading-snug mb-3 group-hover:text-[var(--color-brand-primary)] transition-colors duration-[var(--transition-fast)]">
+        {/* ── Content ── */}
+        <div className="flex flex-col flex-1 p-5">
+          {/* Name */}
+          <h3
+            className="
+              font-extrabold text-[var(--text-md)] text-[var(--color-neutral-900)] leading-snug mb-2
+              group-hover:text-[var(--color-brand-primary)]
+              transition-colors duration-200
+            "
+          >
             {name}
           </h3>
 
-          {/* Ingredient preview */}
+          {/* Ingredient chips */}
           {ingredients.length > 0 && (
-            <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] mb-4 line-clamp-2 leading-relaxed">
-              {ingredients.slice(0, 4).join(" · ")}
-              {ingredients.length > 4 && ` +${ingredients.length - 4} more`}
-            </p>
+            <div className="flex flex-wrap gap-1 mb-4">
+              {ingredients.slice(0, 3).map((ing, i) => (
+                <span
+                  key={i}
+                  className="
+                    px-2 py-0.5 rounded-full
+                    bg-[var(--color-neutral-50)]
+                    text-[var(--color-neutral-500)]
+                    text-[11px] font-medium
+                    border border-[var(--color-neutral-100)]
+                  "
+                >
+                  {ing}
+                </span>
+              ))}
+              {ingredients.length > 3 && (
+                <span className="px-2 py-0.5 text-[11px] text-[var(--color-neutral-400)]">
+                  +{ingredients.length - 3}
+                </span>
+              )}
+            </div>
           )}
 
-          {/* Spacer */}
           <div className="flex-1" />
 
-          {/* Bottom meta row */}
-          <div className="flex items-center flex-wrap gap-2 pt-3 border-t border-[var(--color-neutral-100)]">
-            {difficulty && (
-              <span className={`text-[var(--text-xs)] font-semibold px-2 py-0.5 rounded-full ${diffColor}`}>
-                <ChefHat size={11} className="inline mr-1" />
-                {difficulty}
+          {/* Footer row */}
+          <div className="flex items-center gap-3 pt-3 border-t border-[var(--color-neutral-100)]">
+            {/* Difficulty dot */}
+            {diff && (
+              <span className="flex items-center gap-1.5 text-[var(--text-xs)] font-semibold text-[var(--color-neutral-600)]">
+                <span className="w-2 h-2 rounded-full" style={{ background: diff.dot }} />
+                {diff.text}
               </span>
             )}
+
             {displayTime && (
               <span className="flex items-center gap-1 text-[var(--text-xs)] text-[var(--color-neutral-400)]">
                 <Clock size={11} />
                 {displayTime}
               </span>
             )}
+
             {servings && (
               <span className="flex items-center gap-1 text-[var(--text-xs)] text-[var(--color-neutral-400)]">
                 <Users size={11} />
                 {servings}
               </span>
             )}
+
             {isVegan && (
-              <span className="flex items-center gap-1 text-[var(--text-xs)] font-semibold text-[var(--color-accent-green)]">
-                <Leaf size={11} />
+              <span className="flex items-center gap-1 text-[11px] font-semibold text-[var(--color-accent-green)]">
+                <Leaf size={11} fill="currentColor" />
                 Vegan
               </span>
             )}
-            <span
-              className="ml-auto flex items-center gap-0.5 text-[var(--text-xs)] font-semibold"
-              style={{ color: spice.color }}
-            >
-              {Array.from({ length: spice.flames }).map((_, i) => (
-                <Flame key={i} size={11} />
-              ))}
+
+            {/* Arrow CTA */}
+            <span className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <ArrowRight size={14} className="text-[var(--color-brand-primary)]" />
             </span>
           </div>
         </div>

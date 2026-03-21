@@ -6,16 +6,8 @@ import {
   ChefSecret,
   CookingStreak,
 } from "@/components/home";
-import { auth } from "@/lib/auth"
-import { redirect } from "next/navigation"
 
-export default async function HomePage() {
-  const session = await auth()
-
-  if (!session) {
-    redirect("/login")
-  }
-
+export default function HomePage() {
   return (
     <div className="flex gap-6">
       {/* Left Column — Main Content */}
