@@ -26,14 +26,14 @@ export default async function AccountPage() {
 
 
 
-  const memberSince = "Joined recently";
+  const memberSince = "Joined Recently";
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 relative w-full">
       <h1 className="text-[var(--text-3xl)] font-bold text-[var(--color-neutral-900)] mb-2">
         My Account
       </h1>
-      <p className="text-[var(--text-base)] text-[var(--color-neutral-500)] mb-8">
+      <p className="text-[var(--text-base)] text-[var(--color-neutral-700)] mb-8">
         Manage your profile, data, and preferences.
       </p>
 

@@ -39,7 +39,7 @@ export default function FormInput({
         {labelTrailing}
       </div>
       <div className="relative">
-        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-400)]">
+        <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-500)]">
           {icon}
         </span>
         <input
@@ -54,7 +54,7 @@ export default function FormInput({
             bg-white border border-[var(--color-neutral-200)]
             rounded-[var(--radius-xl)]
             text-[var(--text-base)] text-[var(--color-neutral-900)]
-            placeholder-[var(--color-neutral-300)]
+            placeholder:text-[var(--color-neutral-500)]
             focus:outline-none focus:border-[var(--color-brand-primary)]
             focus:ring-2 focus:ring-[var(--color-brand-primary-shadow)]
             transition-all duration-[var(--transition-base)]

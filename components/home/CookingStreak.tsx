@@ -84,7 +84,7 @@ export default function CookingStreak() {
             <span className="text-4xl font-extrabold text-[var(--color-brand-primary)] leading-none tabular-nums">
               {streak}
             </span>
-            <span className="text-[var(--text-sm)] text-[var(--color-neutral-500)] pb-1">
+            <span className="text-[var(--text-sm)] text-[var(--color-neutral-600)] pb-1">
               day{streak !== 1 ? "s" : ""} in a row
             </span>
           </div>
@@ -119,7 +119,7 @@ export default function CookingStreak() {
                     style={{
                       color: isToday
                         ? "var(--color-brand-primary)"
-                        : "var(--color-neutral-400)",
+                        : "var(--color-neutral-600)",
                     }}
                   >
                     {label}
@@ -140,7 +140,7 @@ export default function CookingStreak() {
             />
           </div>
 
-          <p className="text-[11px] text-[var(--color-neutral-400)]">
+          <p className="text-[11px] text-[var(--color-neutral-600)] mt-2">
             {remaining === 0
               ? "🎉 Weekly goal reached! Keep it up!"
               : `${remaining} more active day${remaining !== 1 ? "s" : ""} to reach your weekly goal`}

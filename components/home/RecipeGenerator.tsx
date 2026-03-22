@@ -218,7 +218,7 @@ export default function RecipeGenerator() {
               bg-[var(--color-neutral-50)]
               border border-[var(--color-neutral-200)]
               text-[var(--text-base)] text-[var(--color-neutral-700)]
-              placeholder:text-[var(--color-neutral-300)]
+              placeholder:text-[var(--color-neutral-500)]
               focus:outline-none focus:border-[var(--color-brand-primary)]
               focus:ring-2 focus:ring-[var(--color-brand-primary-shadow)]
               transition-all duration-[var(--transition-base)]

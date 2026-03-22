@@ -23,17 +23,17 @@ export default async function HomeLayout({
       ? "Afternoon"
       : hour >= 17 && hour < 21
       ? "Evening"
-      : "Night";
+      : "Evening";
 
   const firstName = session.user.name?.split(" ")[0] ?? "Chef";
 
   return (
-    <div className="flex min-h-screen bg-[var(--color-surface-page)]">
+    <div className="flex min-h-screen bg-[var(--color-surface-page)] transition-colors duration-300">
       <Sidebar
         userName={session.user.name ?? ""}
         userEmail={session.user.email ?? ""}
       />
-      <main className="flex-1 ml-[var(--sidebar-width)]">
+      <main className="flex-1 ml-[var(--sidebar-width)] bg-[var(--color-surface-page)] transition-colors duration-300">
         <Header
           greeting={`Good ${timeOfDay}, ${firstName}!`}
           subtitle="Ready to cook something authentic today?"

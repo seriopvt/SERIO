@@ -107,7 +107,7 @@ export default function RecipeSearch() {
         </h3>
       </div>
       <p className="text-[var(--text-base)] text-[var(--color-neutral-400)] mb-5">
-        Find a saved recipe instantly — no AI needed.
+        Find a saved recipe instantly.
       </p>
 
       {/* ── Search Input ── */}
@@ -129,7 +129,7 @@ export default function RecipeSearch() {
             className="text-[var(--color-brand-primary)] animate-spin shrink-0"
           />
         ) : (
-          <Search size={16} className="text-[var(--color-neutral-400)] shrink-0" />
+          <Search size={16} className="text-[var(--color-neutral-500)] shrink-0" />
         )}
         <input
           type="text"
@@ -145,7 +145,7 @@ export default function RecipeSearch() {
           className="
             flex-1 bg-transparent
             text-[var(--text-base)] text-[var(--color-neutral-700)]
-            placeholder:text-[var(--color-neutral-300)]
+            placeholder:text-[var(--color-neutral-500)]
             outline-none
           "
         />

@@ -3,6 +3,7 @@
 import React from "react";
 import { Bell, Plus } from "lucide-react";
 import { Button } from "@/components/ui";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 interface HeaderProps {
   greeting: string;
@@ -17,6 +18,7 @@ export default function Header({ greeting, subtitle }: HeaderProps) {
         px-8 py-5
         bg-[var(--color-surface-card)]
         border-b border-[var(--color-neutral-100)]
+        transition-colors duration-300
       "
     >
       <div>
@@ -28,14 +30,15 @@ export default function Header({ greeting, subtitle }: HeaderProps) {
         </p>
       </div>
 
-      <div className="flex items-center gap-4">
-        <Button variant="icon" size="md">
+      <div className="flex items-center gap-3">
+        <ThemeToggle />
+        {/* <Button variant="icon" size="md">
           <Bell size={18} />
         </Button>
         <Button variant="primary" size="md">
           <Plus size={16} />
           New Recipe
-        </Button>
+        </Button> */}
       </div>
     </header>
   );

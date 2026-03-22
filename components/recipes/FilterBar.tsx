@@ -43,7 +43,7 @@ export default function FilterBar() {
       <div className="relative flex-1">
         <Search
           size={15}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-neutral-400)] pointer-events-none"
+          className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-neutral-500)] pointer-events-none"
         />
         <input
           type="text"
@@ -56,7 +56,7 @@ export default function FilterBar() {
             bg-[var(--color-surface-card)]
             border border-[var(--color-neutral-200)]
             text-[var(--text-base)] text-[var(--color-neutral-700)]
-            placeholder:text-[var(--color-neutral-300)]
+            placeholder:text-[var(--color-neutral-500)]
             focus:outline-none focus:border-[var(--color-brand-primary)]
             focus:ring-2 focus:ring-[var(--color-brand-primary-shadow)]
             shadow-[var(--shadow-xs)]
@@ -94,7 +94,7 @@ export default function FilterBar() {
                 ${
                   active
                     ? "bg-[var(--color-brand-primary)] border-[var(--color-brand-primary)] text-white shadow-[var(--shadow-brand)]"
-                    : "border-[var(--color-neutral-200)] text-[var(--color-neutral-500)] hover:border-[var(--color-brand-primary)] hover:text-[var(--color-brand-primary)] bg-white"
+                    : "border-[var(--color-neutral-200)] text-[var(--color-neutral-500)] hover:border-[var(--color-brand-primary)] hover:text-[var(--color-brand-primary)] bg-[var(--color-surface-card)]"
                 }
               `}
             >

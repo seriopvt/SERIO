@@ -56,8 +56,8 @@ export default function AccountClient({ user, stats }: AccountClientProps) {
           <h2 className="text-xl font-bold text-[var(--color-neutral-900)]">
             {user.name}
           </h2>
-          <p className="text-[var(--color-neutral-500)]">{user.email}</p>
-          <p className="text-sm text-[var(--color-neutral-400)] mt-1">
+          <p className="text-[var(--color-neutral-700)]">{user.email}</p>
+          <p className="text-sm text-[var(--color-neutral-700)] mt-1">
             {user.memberSince}
           </p>
         </div>
@@ -66,13 +66,13 @@ export default function AccountClient({ user, stats }: AccountClientProps) {
       {/* Stats Section */}
       <section className="grid grid-cols-2 gap-4">
         <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-xl)] p-5 border border-[var(--color-neutral-100)]">
-          <p className="text-[var(--color-neutral-500)] text-sm mb-1">Saved Recipes</p>
+          <p className="text-[var(--color-neutral-700)] text-sm mb-1">Saved Recipes</p>
           <p className="text-3xl font-bold text-[var(--color-neutral-900)]">
             {stats.savedRecipes}
           </p>
         </div>
         <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-xl)] p-5 border border-[var(--color-neutral-100)]">
-          <p className="text-[var(--color-neutral-500)] text-sm mb-1">Activity Days</p>
+          <p className="text-[var(--color-neutral-700)] text-sm mb-1">Activity Days</p>
           <p className="text-3xl font-bold text-[var(--color-neutral-900)]">
             {stats.activities}
           </p>
@@ -98,7 +98,7 @@ export default function AccountClient({ user, stats }: AccountClientProps) {
                 <p className="font-semibold text-[var(--color-neutral-900)]">
                   Log Out
                 </p>
-                <p className="text-sm text-[var(--color-neutral-500)]">
+                <p className="text-sm text-[var(--color-neutral-700)]">
                   Sign out of your account on this device
                 </p>
               </div>

@@ -32,12 +32,12 @@ const SPICE_CONFIG: Record<string, { label: string; color: string; bg: string; f
 
 // Deterministic pastel gradient per recipe id
 const CARD_GRADIENTS = [
-  "from-orange-50 via-amber-50 to-yellow-50",
-  "from-rose-50 via-orange-50 to-amber-50",
-  "from-amber-50 via-orange-50 to-red-50",
-  "from-yellow-50 via-lime-50 to-green-50",
-  "from-red-50 via-rose-50 to-orange-50",
-  "from-orange-50 via-red-50 to-rose-50",
+  "from-orange-500/10 via-amber-500/10 to-yellow-500/10",
+  "from-rose-500/10 via-orange-500/10 to-amber-500/10",
+  "from-amber-500/10 via-orange-500/10 to-red-500/10",
+  "from-yellow-500/10 via-lime-500/10 to-green-500/10",
+  "from-red-500/10 via-rose-500/10 to-orange-500/10",
+  "from-orange-500/10 via-red-500/10 to-rose-500/10",
 ];
 
 // Ethiopian-themed emoji motifs shown as decorative art
@@ -86,7 +86,7 @@ export default function RecipeCatalogCard({
       <div
         className="
           relative h-full flex flex-col
-          bg-white rounded-[var(--radius-2xl)]
+          bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)]
           border border-[var(--color-neutral-100)]
           shadow-[var(--shadow-sm)]
           hover:shadow-[0_8px_30px_rgba(0,0,0,0.10)]
@@ -132,9 +132,9 @@ export default function RecipeCatalogCard({
               className="
                 absolute top-3 right-3
                 w-8 h-8 flex items-center justify-center
-                rounded-full bg-white/90 backdrop-blur-sm
+                rounded-full bg-[var(--color-surface-card)]/90 backdrop-blur-sm
                 shadow-[var(--shadow-sm)]
-                hover:bg-white hover:scale-110
+                hover:bg-[var(--color-surface-elevated)] hover:scale-110
                 transition-all duration-200
                 cursor-pointer disabled:opacity-50
               "
@@ -180,10 +180,10 @@ export default function RecipeCatalogCard({
                   key={i}
                   className="
                     px-2 py-0.5 rounded-full
-                    bg-[var(--color-neutral-50)]
-                    text-[var(--color-neutral-500)]
+                    bg-[var(--color-surface-card)]
+                    text-[var(--color-neutral-600)]
                     text-[11px] font-medium
-                    border border-[var(--color-neutral-100)]
+                    border border-[var(--color-neutral-200)]
                   "
                 >
                   {ing}

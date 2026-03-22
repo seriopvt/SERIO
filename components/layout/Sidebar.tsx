@@ -9,6 +9,7 @@ import {
   UtensilsCrossed,
   User,
   ChevronDown,
+  ChefHat,
 } from "lucide-react";
 import { Avatar } from "@/components/ui";
 
@@ -30,7 +31,7 @@ function SidebarItem({ icon, label, href, exact = false }: SidebarItemProps) {
         flex items-center gap-3 w-full
         px-3 py-2.5 rounded-[var(--radius-xl)]
         text-[var(--text-base)] font-medium
-        transition-colors duration-[var(--transition-base)]
+        transition-all duration-[var(--transition-base)]
         ${
           active
             ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
@@ -73,19 +74,20 @@ export default function Sidebar({ userName = "", userEmail = "" }: SidebarProps)
         border-r border-[var(--color-neutral-100)]
         flex flex-col justify-between
         py-6 px-4 fixed h-screen z-20
+        transition-colors duration-300
       "
     >
       <div>
         {/* Logo */}
         <Link href="/home" className="flex items-center gap-2 mb-8 px-2">
-          <div className="w-8 h-8 bg-[var(--color-brand-primary)] rounded-[var(--radius-lg)] flex items-center justify-center">
-            <span className="text-white font-bold text-lg">✕</span>
+          <div className="w-8 h-8 bg-[var(--color-brand-primary)] rounded-[var(--radius-lg)] flex items-center justify-center flex-shrink-0 text-white">
+            <ChefHat size={18} strokeWidth={2.5} />
           </div>
           <div>
             <h1 className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)] leading-none">
               SERIO
             </h1>
-            <p className="text-[10px] text-[var(--color-neutral-400)] tracking-wider uppercase">
+            <p className="text-[10px] text-[var(--color-neutral-600)] tracking-wider uppercase">
               Ethiopian Kitchen
             </p>
           </div>
@@ -128,11 +130,11 @@ export default function Sidebar({ userName = "", userEmail = "" }: SidebarProps)
             <p className="text-[var(--text-base)] font-semibold text-[var(--color-neutral-900)] truncate">
               {displayName}
             </p>
-            <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)]">
+            <p className="text-[var(--text-xs)] text-[var(--color-neutral-500)]">
               Pro Member
             </p>
           </div>
-          <ChevronDown size={13} className="text-[var(--color-neutral-400)] shrink-0" />
+          <ChevronDown size={13} className="text-[var(--color-neutral-500)] shrink-0" />
         </div>
 
         {/* Account icon button */}
@@ -142,7 +144,7 @@ export default function Sidebar({ userName = "", userEmail = "" }: SidebarProps)
           className="
             w-9 h-9 flex-shrink-0 flex items-center justify-center
             rounded-[var(--radius-xl)]
-            text-[var(--color-neutral-400)]
+            text-[var(--color-neutral-500)]
             hover:bg-[var(--color-neutral-50)]
             hover:text-[var(--color-neutral-700)]
             transition-colors duration-[var(--transition-base)]

@@ -14,7 +14,7 @@ export default function PantrySearch() {
       <h3 className="text-[var(--text-xl)] font-bold text-[var(--color-neutral-900)] text-center mb-1">
         What&apos;s in your pantry?
       </h3>
-      <p className="text-[var(--text-base)] text-[var(--color-neutral-400)] text-center mb-6">
+      <p className="text-[var(--text-base)] text-[var(--color-neutral-500)] text-center mb-6">
         Enter ingredients to generate traditional Ethiopian recipes instantly.
       </p>
 

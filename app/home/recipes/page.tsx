@@ -8,15 +8,15 @@ import FilterBar from "@/components/recipes/FilterBar";
 import { BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
 
 const SKELETON_GRADIENTS = [
-  ["#fff7ed", "#fef3c7"],
-  ["#fff1f2", "#fff7ed"],
-  ["#fef9c3", "#fff7ed"],
-  ["#f0fdf4", "#fefce8"],
-  ["#fff5f5", "#fff1f2"],
-  ["#fff8f0", "#fef3c7"],
-  ["#fef3c7", "#fff7ed"],
-  ["#fff7ed", "#fefce8"],
-  ["#fff1f2", "#fef9c3"],
+  ["rgba(249, 115, 22, 0.1)", "rgba(245, 158, 11, 0.1)"],
+  ["rgba(244, 63, 94, 0.1)", "rgba(249, 115, 22, 0.1)"],
+  ["rgba(245, 158, 11, 0.1)", "rgba(249, 115, 22, 0.1)"],
+  ["rgba(234, 179, 8, 0.1)", "rgba(132, 204, 22, 0.1)"],
+  ["rgba(239, 68, 68, 0.1)", "rgba(244, 63, 94, 0.1)"],
+  ["rgba(249, 115, 22, 0.1)", "rgba(239, 68, 68, 0.1)"],
+  ["rgba(244, 63, 94, 0.1)", "rgba(249, 115, 22, 0.1)"],
+  ["rgba(249, 115, 22, 0.1)", "rgba(245, 158, 11, 0.1)"],
+  ["rgba(245, 158, 11, 0.1)", "rgba(249, 115, 22, 0.1)"],
 ];
 
 interface PaginatedRecipe extends Omit<RecipeCatalogCardProps, "onSave" | "onUnsave" | "saveLoading" | "isSaved"> {}
@@ -84,10 +84,10 @@ function RecipeGrid() {
         {Array.from({ length: 9 }).map((_, i) => {
           const [g1, g2] = SKELETON_GRADIENTS[i % SKELETON_GRADIENTS.length];
           return (
-            <div key={i} className="bg-white rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden animate-pulse">
+            <div key={i} className="bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden animate-pulse">
               <div
                 className="h-[140px]"
-                style={{ background: `linear-gradient(135deg, ${g1}, ${g2})` }}
+                style={{ backgroundImage: `linear-gradient(135deg, ${g1}, ${g2})` }}
               />
               <div className="p-5 space-y-3">
                 <div className="h-3 w-20 bg-[var(--color-neutral-100)] rounded-full" />

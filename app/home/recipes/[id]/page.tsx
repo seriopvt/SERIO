@@ -50,12 +50,12 @@ const DIFFICULTY_STYLE: Record<string, { dot: string }> = {
 };
 
 const CARD_GRADIENTS = [
-  ["#fff7ed", "#fef3c7"],
-  ["#fff1f2", "#fff7ed"],
-  ["#fef9c3", "#fff7ed"],
-  ["#f0fdf4", "#fefce8"],
-  ["#fff5f5", "#fff1f2"],
-  ["#fff8f0", "#fef3c7"],
+  ["rgba(249, 115, 22, 0.1)", "rgba(245, 158, 11, 0.1)"],
+  ["rgba(244, 63, 94, 0.1)", "rgba(249, 115, 22, 0.1)"],
+  ["rgba(245, 158, 11, 0.1)", "rgba(249, 115, 22, 0.1)"],
+  ["rgba(234, 179, 8, 0.1)", "rgba(132, 204, 22, 0.1)"],
+  ["rgba(239, 68, 68, 0.1)", "rgba(244, 63, 94, 0.1)"],
+  ["rgba(249, 115, 22, 0.1)", "rgba(239, 68, 68, 0.1)"],
 ];
 
 const CARD_MOTIFS = ["🍲", "🌿", "🫘", "🌶️", "🧅", "🥘"];
@@ -131,8 +131,8 @@ export default function RecipeDetailPage() {
       <div className="animate-pulse">
         <div className="h-5 w-28 bg-[var(--color-neutral-100)] rounded-full mb-8" />
         <div
-          className="w-full h-64 rounded-[var(--radius-2xl)] mb-8"
-          style={{ background: `linear-gradient(135deg, ${g1}, ${g2})` }}
+          className="w-full h-64 rounded-[var(--radius-2xl)] mb-8 bg-[var(--color-surface-card)]"
+          style={{ backgroundImage: `linear-gradient(135deg, ${g1}, ${g2})` }}
         />
         <div className="grid lg:grid-cols-[1fr_380px] gap-8">
           <div className="space-y-4">
@@ -198,9 +198,10 @@ export default function RecipeDetailPage() {
           relative w-full rounded-[var(--radius-2xl)] overflow-hidden mb-8
           border border-[var(--color-neutral-100)]
           shadow-[var(--shadow-md)]
+          bg-[var(--color-surface-card)]
         "
         style={{
-          background: `linear-gradient(135deg, ${g1} 0%, ${g2} 100%)`,
+          backgroundImage: `linear-gradient(135deg, ${g1} 0%, ${g2} 100%)`,
           minHeight: "280px",
         }}
       >
@@ -249,20 +250,20 @@ export default function RecipeDetailPage() {
             <div className="flex flex-wrap items-center gap-2">
               {diff && recipe.difficulty && (
                 <span
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[var(--text-sm)] font-semibold bg-white/70 backdrop-blur-sm text-[var(--color-neutral-700)]"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[var(--text-sm)] font-semibold bg-[var(--color-surface-card)]/70 backdrop-blur-sm text-[var(--color-neutral-700)]"
                 >
                   <span className="w-2 h-2 rounded-full" style={{ background: diff.dot }} />
                   {recipe.difficulty}
                 </span>
               )}
               {displayTime && (
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[var(--text-sm)] bg-white/70 backdrop-blur-sm text-[var(--color-neutral-700)]">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[var(--text-sm)] bg-[var(--color-surface-card)]/70 backdrop-blur-sm text-[var(--color-neutral-700)]">
                   <Clock size={13} />
                   {displayTime}
                 </span>
               )}
               {recipe.servings && (
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[var(--text-sm)] bg-white/70 backdrop-blur-sm text-[var(--color-neutral-700)]">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[var(--text-sm)] bg-[var(--color-surface-card)]/70 backdrop-blur-sm text-[var(--color-neutral-700)]">
                   <Users size={13} />
                   {recipe.servings} servings
                 </span>
@@ -309,7 +310,7 @@ export default function RecipeDetailPage() {
             ${
               saveStatus === "saved"
                 ? "bg-[var(--color-brand-primary)] text-white shadow-[var(--shadow-brand)] hover:bg-[var(--color-brand-primary-hover)]"
-                : "bg-white border border-[var(--color-neutral-200)] text-[var(--color-neutral-700)] hover:border-[var(--color-brand-primary)] hover:text-[var(--color-brand-primary)] hover:shadow-[var(--shadow-brand)]"
+                : "bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)] text-[var(--color-neutral-700)] hover:border-[var(--color-brand-primary)] hover:text-[var(--color-brand-primary)] hover:shadow-[var(--shadow-brand)]"
             }
           `}
         >
@@ -330,7 +331,7 @@ export default function RecipeDetailPage() {
         <div>
           {/* Progress bar (if steps have been checked) */}
           {totalSteps > 0 && (
-            <div className="bg-white rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] p-6 mb-6">
+            <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] p-6 mb-6">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[var(--text-lg)] font-extrabold text-[var(--color-neutral-900)]">
                   Instructions
@@ -365,9 +366,9 @@ export default function RecipeDetailPage() {
                           group
                         "
                         style={{
-                          background: done ? `color-mix(in srgb, ${spice.color} 6%, white)` : "transparent",
+                          background: done ? `color-mix(in srgb, ${spice.color} 6%, var(--color-surface-card))` : "transparent",
                           border: done
-                            ? `1px solid color-mix(in srgb, ${spice.color} 25%, white)`
+                            ? `1px solid color-mix(in srgb, ${spice.color} 25%, var(--color-surface-card))`
                             : "1px solid transparent",
                         }}
                       >
@@ -377,7 +378,7 @@ export default function RecipeDetailPage() {
                             <CheckCircle2
                               size={22}
                               style={{ color: spice.color }}
-                              fill={`color-mix(in srgb, ${spice.color} 15%, white)`}
+                              fill={`color-mix(in srgb, ${spice.color} 15%, var(--color-surface-card))`}
                             />
                           ) : (
                             <span
@@ -419,8 +420,8 @@ export default function RecipeDetailPage() {
             <div
               className="flex gap-4 p-6 rounded-[var(--radius-2xl)] border"
               style={{
-                background: `linear-gradient(135deg, color-mix(in srgb, ${spice.color} 6%, white), color-mix(in srgb, ${spice.color} 3%, white))`,
-                borderColor: `color-mix(in srgb, ${spice.color} 20%, white)`,
+                background: `linear-gradient(135deg, color-mix(in srgb, ${spice.color} 6%, var(--color-surface-card)), color-mix(in srgb, ${spice.color} 3%, var(--color-surface-card)))`,
+                borderColor: `color-mix(in srgb, ${spice.color} 20%, var(--color-surface-card))`,
               }}
             >
               <div
@@ -443,13 +444,13 @@ export default function RecipeDetailPage() {
 
         {/* RIGHT: Ingredients */}
         <div className="sticky top-8">
-          <div className="bg-white rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden">
+          <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden">
             {/* Header */}
             <div
               className="px-6 py-5 flex items-center gap-3"
               style={{
-                background: `linear-gradient(135deg, color-mix(in srgb, ${spice.color} 8%, white), color-mix(in srgb, ${spice.color} 4%, white))`,
-                borderBottom: `1px solid color-mix(in srgb, ${spice.color} 15%, white)`,
+                background: `linear-gradient(135deg, color-mix(in srgb, ${spice.color} 8%, var(--color-surface-card)), color-mix(in srgb, ${spice.color} 4%, var(--color-surface-card)))`,
+                borderBottom: `1px solid color-mix(in srgb, ${spice.color} 15%, var(--color-surface-card))`,
               }}
             >
               <div

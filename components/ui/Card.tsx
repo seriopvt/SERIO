@@ -24,6 +24,7 @@ export default function Card({
         rounded-[var(--radius-2xl)]
         border border-[var(--color-neutral-100)]
         shadow-[var(--shadow-sm)]
+        transition-colors duration-300
         ${paddingStyles[padding]}
         ${className}
       `}
