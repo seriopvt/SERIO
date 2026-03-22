@@ -5,6 +5,7 @@ model User {
   password      String? // nullable for OAuth users
   emailVerified DateTime?
   image         String?
+  geminiApiKey  String? // AES-256-GCM encrypted Gemini API key (user-provided)
   accounts      Account[]
   sessions      Session[]
   savedRecipes  SavedRecipe[]

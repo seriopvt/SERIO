@@ -48,6 +48,7 @@ function SidebarItem({ icon, label, href, exact = false }: SidebarItemProps) {
 interface SidebarProps {
   userName?: string;
   userEmail?: string;
+  hasApiKey?: boolean;
 }
 
 function getInitials(name: string): string {
@@ -62,9 +63,16 @@ function getDisplayName(name: string): string {
   return `${parts[0]} ${parts[parts.length - 1][0]}.`;
 }
 
-export default function Sidebar({ userName = "", userEmail = "" }: SidebarProps) {
+export default function Sidebar({
+  userName = "",
+  userEmail = "",
+  hasApiKey = true,
+}: SidebarProps) {
   const initials = userName ? getInitials(userName) : "??";
   const displayName = userName ? getDisplayName(userName) : userEmail || "User";
+  const pathname = usePathname();
+  const accountActive = pathname.startsWith("/home/account");
+  const showDot = !hasApiKey;
 
   return (
     <aside
@@ -114,7 +122,7 @@ export default function Sidebar({ userName = "", userEmail = "" }: SidebarProps)
         </nav>
       </div>
 
-      {/* Bottom: profile + settings */}
+      {/* ── Bottom: profile + account icon ──────────────────────── */}
       <div className="flex items-center gap-2">
         {/* Profile chip */}
         <div
@@ -131,26 +139,35 @@ export default function Sidebar({ userName = "", userEmail = "" }: SidebarProps)
               {displayName}
             </p>
             <p className="text-[var(--text-xs)] text-[var(--color-neutral-500)]">
-              Pro Member
+              {hasApiKey ? "Pro Member" : "Setup needed"}
             </p>
           </div>
           <ChevronDown size={13} className="text-[var(--color-neutral-500)] shrink-0" />
         </div>
 
-        {/* Account icon button */}
+        {/* Account icon button — with notification dot if no API key */}
         <Link
           href="/home/account"
-          title="Account"
-          className="
-            w-9 h-9 flex-shrink-0 flex items-center justify-center
+          title={showDot ? "Add your Gemini API key — click to set up" : "Account"}
+          className={`
+            relative w-9 h-9 flex-shrink-0 flex items-center justify-center
             rounded-[var(--radius-xl)]
-            text-[var(--color-neutral-500)]
-            hover:bg-[var(--color-neutral-50)]
-            hover:text-[var(--color-neutral-700)]
             transition-colors duration-[var(--transition-base)]
-          "
+            ${accountActive
+              ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
+              : "text-[var(--color-neutral-500)] hover:bg-[var(--color-neutral-50)] hover:text-[var(--color-neutral-700)]"
+            }
+          `}
         >
           <User size={17} />
+
+          {/* Red notification dot */}
+          {showDot && (
+            <span
+              className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-[var(--color-surface-card)] animate-pulse"
+              aria-label="Action required"
+            />
+          )}
         </Link>
       </div>
     </aside>

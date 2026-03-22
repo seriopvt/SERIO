@@ -1608,6 +1608,7 @@ export namespace Prisma {
     password: string | null
     emailVerified: Date | null
     image: string | null
+    geminiApiKey: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1617,6 +1618,7 @@ export namespace Prisma {
     password: string | null
     emailVerified: Date | null
     image: string | null
+    geminiApiKey: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1626,6 +1628,7 @@ export namespace Prisma {
     password: number
     emailVerified: number
     image: number
+    geminiApiKey: number
     _all: number
   }
 
@@ -1637,6 +1640,7 @@ export namespace Prisma {
     password?: true
     emailVerified?: true
     image?: true
+    geminiApiKey?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1646,6 +1650,7 @@ export namespace Prisma {
     password?: true
     emailVerified?: true
     image?: true
+    geminiApiKey?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1655,6 +1660,7 @@ export namespace Prisma {
     password?: true
     emailVerified?: true
     image?: true
+    geminiApiKey?: true
     _all?: true
   }
 
@@ -1737,6 +1743,7 @@ export namespace Prisma {
     password: string | null
     emailVerified: Date | null
     image: string | null
+    geminiApiKey: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -1763,6 +1770,7 @@ export namespace Prisma {
     password?: boolean
     emailVerified?: boolean
     image?: boolean
+    geminiApiKey?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     savedRecipes?: boolean | User$savedRecipesArgs<ExtArgs>
@@ -1777,6 +1785,7 @@ export namespace Prisma {
     password?: boolean
     emailVerified?: boolean
     image?: boolean
+    geminiApiKey?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1786,6 +1795,7 @@ export namespace Prisma {
     password?: boolean
     emailVerified?: boolean
     image?: boolean
+    geminiApiKey?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1795,9 +1805,10 @@ export namespace Prisma {
     password?: boolean
     emailVerified?: boolean
     image?: boolean
+    geminiApiKey?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "emailVerified" | "image", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "password" | "emailVerified" | "image" | "geminiApiKey", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -1823,6 +1834,7 @@ export namespace Prisma {
       password: string | null
       emailVerified: Date | null
       image: string | null
+      geminiApiKey: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2256,6 +2268,7 @@ export namespace Prisma {
     readonly password: FieldRef<"User", 'String'>
     readonly emailVerified: FieldRef<"User", 'DateTime'>
     readonly image: FieldRef<"User", 'String'>
+    readonly geminiApiKey: FieldRef<"User", 'String'>
   }
     
 
@@ -10297,7 +10310,8 @@ export namespace Prisma {
     email: 'email',
     password: 'password',
     emailVerified: 'emailVerified',
-    image: 'image'
+    image: 'image',
+    geminiApiKey: 'geminiApiKey'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -10515,6 +10529,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    geminiApiKey?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     savedRecipes?: SavedRecipeListRelationFilter
@@ -10528,6 +10543,7 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    geminiApiKey?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     savedRecipes?: SavedRecipeOrderByRelationAggregateInput
@@ -10544,6 +10560,7 @@ export namespace Prisma {
     password?: StringNullableFilter<"User"> | string | null
     emailVerified?: DateTimeNullableFilter<"User"> | Date | string | null
     image?: StringNullableFilter<"User"> | string | null
+    geminiApiKey?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     savedRecipes?: SavedRecipeListRelationFilter
@@ -10557,6 +10574,7 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     emailVerified?: SortOrderInput | SortOrder
     image?: SortOrderInput | SortOrder
+    geminiApiKey?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -10572,6 +10590,7 @@ export namespace Prisma {
     password?: StringNullableWithAggregatesFilter<"User"> | string | null
     emailVerified?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
+    geminiApiKey?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type AccountWhereInput = {
@@ -11009,6 +11028,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     savedRecipes?: SavedRecipeCreateNestedManyWithoutUserInput
@@ -11022,6 +11042,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     savedRecipes?: SavedRecipeUncheckedCreateNestedManyWithoutUserInput
@@ -11035,6 +11056,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     savedRecipes?: SavedRecipeUpdateManyWithoutUserNestedInput
@@ -11048,6 +11070,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     savedRecipes?: SavedRecipeUncheckedUpdateManyWithoutUserNestedInput
@@ -11061,6 +11084,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -11070,6 +11094,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -11079,6 +11104,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountCreateInput = {
@@ -11608,6 +11634,7 @@ export namespace Prisma {
     password?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    geminiApiKey?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -11617,6 +11644,7 @@ export namespace Prisma {
     password?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    geminiApiKey?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -11626,6 +11654,7 @@ export namespace Prisma {
     password?: SortOrder
     emailVerified?: SortOrder
     image?: SortOrder
+    geminiApiKey?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -12814,6 +12843,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     savedRecipes?: SavedRecipeCreateNestedManyWithoutUserInput
     activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
@@ -12826,6 +12856,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     savedRecipes?: SavedRecipeUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
@@ -12854,6 +12885,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     savedRecipes?: SavedRecipeUpdateManyWithoutUserNestedInput
     activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
@@ -12866,6 +12898,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     savedRecipes?: SavedRecipeUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
@@ -12878,6 +12911,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     savedRecipes?: SavedRecipeCreateNestedManyWithoutUserInput
     activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
@@ -12890,6 +12924,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     savedRecipes?: SavedRecipeUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
@@ -12918,6 +12953,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     savedRecipes?: SavedRecipeUpdateManyWithoutUserNestedInput
     activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
@@ -12930,6 +12966,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     savedRecipes?: SavedRecipeUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput
@@ -12942,6 +12979,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     savedRecipes?: SavedRecipeCreateNestedManyWithoutUserInput
@@ -12954,6 +12992,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     savedRecipes?: SavedRecipeUncheckedCreateNestedManyWithoutUserInput
@@ -12982,6 +13021,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     savedRecipes?: SavedRecipeUpdateManyWithoutUserNestedInput
@@ -12994,6 +13034,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     savedRecipes?: SavedRecipeUncheckedUpdateManyWithoutUserNestedInput
@@ -13044,6 +13085,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     activityLogs?: ActivityLogCreateNestedManyWithoutUserInput
@@ -13056,6 +13098,7 @@ export namespace Prisma {
     password?: string | null
     emailVerified?: Date | string | null
     image?: string | null
+    geminiApiKey?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: ActivityLogUncheckedCreateNestedManyWithoutUserInput
@@ -13114,6 +13157,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     activityLogs?: ActivityLogUpdateManyWithoutUserNestedInput
@@ -13126,6 +13170,7 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     image?: NullableStringFieldUpdateOperationsInput | string | null
+    geminiApiKey?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: ActivityLogUncheckedUpdateManyWithoutUserNestedInput

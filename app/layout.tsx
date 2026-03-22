@@ -14,8 +14,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SERIO — Ethiopian Kitchen",
-  description: "Your AI-powered Ethiopian recipe companion.",
+  title: {
+    default: "SERIO — Ethiopian Kitchen",
+    template: "%s | SERIO"
+  },
+  description: "Your AI-powered Ethiopian recipe companion. Discover traditional recipes, spices, and cooking tips.",
+  icons: {
+    icon: [
+      { url: "/icon.png" },
+      { url: "/favicon.ico" },
+    ],
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({

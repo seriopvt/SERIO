@@ -15,16 +15,25 @@ export default async function AccountPage() {
     redirect("/");
   }
 
-  // Get some user stats
-  const savedRecipesCount = await db.savedRecipe.count({
-    where: { userId: session.user.id }
-  });
-
-  const activityLogCount = await db.activityLog.count({
-    where: { userId: session.user.id }
-  });
-
-
+  let savedRecipesCount = 0;
+  let activityLogCount = 0;
+  let hasApiKey = false;
+  
+  try {
+    const [saved, activities, userRecord] = await Promise.all([
+      db.savedRecipe.count({ where: { userId: session.user.id } }),
+      db.activityLog.count({ where: { userId: session.user.id } }),
+      db.user.findUnique({
+        where: { id: session.user.id },
+        select: { geminiApiKey: true },
+      }),
+    ]);
+    savedRecipesCount = saved;
+    activityLogCount = activities;
+    hasApiKey = Boolean(userRecord?.geminiApiKey);
+  } catch (error) {
+    console.error("Failed to fetch user stats (might be missing migration):", error);
+  }
 
   const memberSince = "Joined Recently";
 
@@ -37,7 +46,7 @@ export default async function AccountPage() {
         Manage your profile, data, and preferences.
       </p>
 
-      <AccountClient 
+      <AccountClient
         user={{
           name: session.user.name || "User",
           email: session.user.email || "",
@@ -47,6 +56,7 @@ export default async function AccountPage() {
           savedRecipes: savedRecipesCount,
           activities: activityLogCount,
         }}
+        hasApiKey={hasApiKey}
       />
     </div>
   );

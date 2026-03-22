@@ -126,7 +126,8 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   emailVerified: 'emailVerified',
-  image: 'image'
+  image: 'image',
+  geminiApiKey: 'geminiApiKey'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {

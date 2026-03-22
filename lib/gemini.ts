@@ -83,10 +83,12 @@ const RESPONSE_SCHEMA = {
 
 export async function generateEthiopianRecipe(
   ingredients: string[],
-  preferences: RecipePreferences = {}
+  preferences: RecipePreferences = {},
+  apiKey?: string
 ): Promise<GeneratedRecipe> {
-  const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new Error("GEMINI_API_KEY environment variable is not set");
+  const key = apiKey ?? process.env.GEMINI_API_KEY;
+  if (!key) throw new Error("No Gemini API key available. Please add your API key in Account settings.");
+
 
   const body = {
     contents: [
@@ -103,7 +105,7 @@ export async function generateEthiopianRecipe(
     },
   };
 
-  const res = await fetch(`${GEMINI_API_URL}?key=${apiKey}`, {
+  const res = await fetch(`${GEMINI_API_URL}?key=${key}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
