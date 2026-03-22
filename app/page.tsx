@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import {
   ChefHat,
   Sparkles,
@@ -13,18 +14,18 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[var(--color-surface-page)] font-[var(--font-family-sans)]">
       {/* ===== NAVBAR ===== */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--color-neutral-100)]">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--color-surface-card)]/80 backdrop-blur-md border-b border-[var(--color-neutral-100)]">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-[var(--color-brand-primary)] rounded-[var(--radius-lg)] flex items-center justify-center">
-              <span className="text-white font-bold text-lg">✕</span>
+              <ChefHat size={18} strokeWidth={2.5} className="text-white" />
             </div>
             <div>
               <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)] leading-none">
                 SERIO
               </span>
-              <span className="text-[10px] text-[var(--color-neutral-400)] tracking-wider uppercase ml-1.5">
+              <span className="text-[10px] text-[var(--color-neutral-600)] tracking-wider uppercase ml-1.5">
                 Ethiopian Kitchen
               </span>
             </div>
@@ -60,6 +61,7 @@ export default function LandingPage() {
             >
               Log In
             </Link>
+            <ThemeToggle />
             <Link
               href="/signup"
               className="
@@ -119,7 +121,7 @@ export default function LandingPage() {
               href="#how-it-works"
               className="
                 inline-flex items-center gap-2
-                bg-white text-[var(--color-neutral-700)]
+                bg-[var(--color-surface-card)] text-[var(--color-neutral-700)]
                 px-8 py-3.5 rounded-full
                 text-[var(--text-md)] font-semibold
                 border border-[var(--color-neutral-200)]
@@ -133,11 +135,11 @@ export default function LandingPage() {
 
           {/* Hero Visual — Mock Dashboard Preview */}
           <div className="relative max-w-4xl mx-auto">
-            <div className="bg-white rounded-[var(--radius-2xl)] shadow-[var(--shadow-lg)] border border-[var(--color-neutral-100)] p-6 md:p-8">
+            <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] shadow-[var(--shadow-lg)] border border-[var(--color-neutral-100)] p-6 md:p-8">
               {/* Mock search bar */}
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex-1 flex items-center bg-[var(--color-neutral-50)] rounded-full px-5 py-3.5 border border-[var(--color-neutral-100)]">
-                  <span className="text-[var(--color-neutral-300)] text-[var(--text-base)]">
+                  <span className="text-[var(--color-neutral-500)] text-[var(--text-base)]">
                     e.g. teff flour, berbere, garlic, onions...
                   </span>
                 </div>
@@ -219,7 +221,7 @@ export default function LandingPage() {
       </section>
 
       {/* ===== HOW IT WORKS ===== */}
-      <section id="how-it-works" className="py-20 px-6 bg-white">
+      <section id="how-it-works" className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-[var(--text-sm)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider mb-2">
@@ -318,7 +320,7 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-[var(--color-brand-primary)] rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-xs">✕</span>
+              <ChefHat size={14} strokeWidth={2.5} className="text-white" />
             </div>
             <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
               SERIO
@@ -347,7 +349,7 @@ function FeatureCard({
   return (
     <div
       className="
-        bg-white rounded-[var(--radius-2xl)] p-6
+        bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] p-6
         border border-[var(--color-neutral-100)]
         shadow-[var(--shadow-xs)]
         hover:shadow-[var(--shadow-md)]
@@ -422,7 +424,7 @@ function TestimonialCard({
   return (
     <div
       className="
-        bg-white rounded-[var(--radius-2xl)] p-6
+        bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] p-6
         border border-[var(--color-neutral-100)]
         shadow-[var(--shadow-xs)]
       "

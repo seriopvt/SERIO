@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ArrowRight, ChefHat } from "lucide-react";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -73,7 +74,7 @@ export default function SignUpPage() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 mb-16">
             <div className="w-9 h-9 bg-[var(--color-brand-primary)] rounded-[var(--radius-lg)] flex items-center justify-center">
-              <span className="text-white font-bold text-xl">✕</span>
+              <ChefHat size={20} strokeWidth={2.5} className="text-white" />
             </div>
             <div>
               <span className="text-[var(--text-md)] font-bold text-white leading-none">
@@ -117,12 +118,15 @@ export default function SignUpPage() {
       </div>
 
       {/* Right Panel — Form */}
-      <div className="flex-1 flex items-center justify-center p-6 md:p-12 bg-[var(--color-surface-page)]">
+      <div className="flex-1 flex items-center justify-center p-6 md:p-12 bg-[var(--color-surface-page)] relative">
+        <div className="absolute top-6 right-6 z-50">
+          <ThemeToggle />
+        </div>
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2 mb-10">
             <div className="w-8 h-8 bg-[var(--color-brand-primary)] rounded-[var(--radius-lg)] flex items-center justify-center">
-              <span className="text-white font-bold text-lg">✕</span>
+              <ChefHat size={18} strokeWidth={2.5} className="text-white" />
             </div>
             <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
               SERIO
@@ -147,7 +151,7 @@ export default function SignUpPage() {
             onClick={handleGoogleSignUp}
             className="
               w-full flex items-center justify-center gap-3
-              bg-white border border-[var(--color-neutral-200)]
+              bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
               rounded-[var(--radius-xl)] px-4 py-3
               text-[var(--text-base)] font-semibold text-[var(--color-neutral-700)]
               hover:bg-[var(--color-neutral-50)] hover:border-[var(--color-neutral-300)]
@@ -189,7 +193,7 @@ export default function SignUpPage() {
               <div className="relative">
                 <User
                   size={18}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-400)]"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-500)]"
                 />
                 <input
                   id="name"
@@ -199,10 +203,10 @@ export default function SignUpPage() {
                   placeholder="Abeba Tesfaye"
                   className="
                     w-full pl-11 pr-4 py-3
-                    bg-white border border-[var(--color-neutral-200)]
+                    bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
                     rounded-[var(--radius-xl)]
                     text-[var(--text-base)] text-[var(--color-neutral-900)]
-                    placeholder-[var(--color-neutral-300)]
+                    placeholder-[var(--color-neutral-500)]
                     focus:outline-none focus:border-[var(--color-brand-primary)]
                     focus:ring-2 focus:ring-[var(--color-brand-primary-shadow)]
                     transition-all duration-[var(--transition-base)]
@@ -222,7 +226,7 @@ export default function SignUpPage() {
               <div className="relative">
                 <Mail
                   size={18}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-400)]"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-500)]"
                 />
                 <input
                   id="email"
@@ -232,10 +236,10 @@ export default function SignUpPage() {
                   placeholder="you@example.com"
                   className="
                     w-full pl-11 pr-4 py-3
-                    bg-white border border-[var(--color-neutral-200)]
+                    bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
                     rounded-[var(--radius-xl)]
                     text-[var(--text-base)] text-[var(--color-neutral-900)]
-                    placeholder-[var(--color-neutral-300)]
+                    placeholder-[var(--color-neutral-500)]
                     focus:outline-none focus:border-[var(--color-brand-primary)]
                     focus:ring-2 focus:ring-[var(--color-brand-primary-shadow)]
                     transition-all duration-[var(--transition-base)]
@@ -255,7 +259,7 @@ export default function SignUpPage() {
               <div className="relative">
                 <Lock
                   size={18}
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-400)]"
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-500)]"
                 />
                 <input
                   id="password"
@@ -266,10 +270,10 @@ export default function SignUpPage() {
                   placeholder="Minimum 8 characters"
                   className="
                     w-full pl-11 pr-11 py-3
-                    bg-white border border-[var(--color-neutral-200)]
+                    bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
                     rounded-[var(--radius-xl)]
                     text-[var(--text-base)] text-[var(--color-neutral-900)]
-                    placeholder-[var(--color-neutral-300)]
+                    placeholder-[var(--color-neutral-500)]
                     focus:outline-none focus:border-[var(--color-brand-primary)]
                     focus:ring-2 focus:ring-[var(--color-brand-primary-shadow)]
                     transition-all duration-[var(--transition-base)]
@@ -278,7 +282,7 @@ export default function SignUpPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-400)] hover:text-[var(--color-neutral-600)] transition-colors cursor-pointer"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-700)] transition-colors cursor-pointer"
                 >
                   {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>

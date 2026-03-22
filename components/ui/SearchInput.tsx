@@ -27,16 +27,16 @@ export default function SearchInput({
         ${className}
       `}
     >
-      <Search size={18} className="text-[var(--color-neutral-400)] mr-3 flex-shrink-0" />
+      <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--color-neutral-500)]" size={18} />
       <input
         type="text"
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         className="
-          bg-transparent flex-1
+          bg-transparent flex-1 pl-7
           text-[var(--text-base)] text-[var(--color-neutral-600)]
-          placeholder-[var(--color-neutral-300)]
+          placeholder:text-[var(--color-neutral-500)]
           outline-none
         "
       />

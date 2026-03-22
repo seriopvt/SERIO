@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import RecipeCard from "./RecipeCard";
 import type { RecipeCardProps } from "./RecipeCard";
 
@@ -41,9 +42,9 @@ export default function SeasonalFavorites() {
         <h3 className="text-[var(--text-lg)] font-bold text-[var(--color-neutral-900)]">
           Seasonal Favorites
         </h3>
-        <button className="text-[var(--text-base)] font-semibold text-[var(--color-brand-primary)] hover:underline cursor-pointer">
+        <Link href="/home/recipes" className="text-[var(--text-base)] font-semibold text-[var(--color-brand-primary)] hover:underline cursor-pointer">
           View All
-        </button>
+        </Link>
       </div>
 
       <div className="grid grid-cols-3 gap-4">

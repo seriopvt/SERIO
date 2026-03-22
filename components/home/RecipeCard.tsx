@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Heart, Clock, Flame, Leaf } from "lucide-react";
 import { FlameKindling } from "lucide-react";
 
@@ -13,6 +14,7 @@ export interface RecipeCardProps {
   time: string;
   tag: string;
   tagType: RecipeTagType;
+  href?: string;
 }
 
 const tagIcons: Record<RecipeTagType, React.ReactNode> = {
@@ -29,16 +31,18 @@ export default function RecipeCard({
   time,
   tag,
   tagType,
+  href,
 }: RecipeCardProps) {
   return (
-    <div
+    <Link
+      href={href || `/home/recipes?q=${encodeURIComponent(title)}`}
       className="
         bg-[var(--color-surface-card)]
-        rounded-[var(--radius-2xl)] overflow-hidden
-        border border-[var(--color-neutral-100)]
-        shadow-[var(--shadow-sm)]
+        rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)]
+        shadow-[var(--shadow-sm)] overflow-hidden
         group hover:shadow-[var(--shadow-md)]
         transition-shadow duration-[var(--transition-base)]
+        block cursor-pointer
       "
     >
       {/* Image */}
@@ -93,6 +97,6 @@ export default function RecipeCard({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-dim": "#ed8132",
+              "error": "#ff6e84",
+              "on-surface": "#fffbff",
+              "inverse-on-surface": "#5a5451",
+              "tertiary-fixed": "#ff937f",
+              "on-tertiary-container": "#510500",
+              "secondary": "#fe8e3e",
+              "background": "#110d0c",
+              "on-surface-variant": "#b2a9a6",
+              "on-error-container": "#ffb2b9",
+              "surface-container-lowest": "#000000",
+              "on-primary-fixed": "#000000",
+              "error-container": "#a70138",
+              "surface-tint": "#ff8f73",
+              "on-tertiary-fixed-variant": "#70180a",
+              "on-primary": "#5e1100",
+              "secondary-container": "#984800",
+              "on-secondary-container": "#fff6f2",
+              "secondary-fixed": "#ffc5a3",
+              "secondary-fixed-dim": "#ffb382",
+              "surface-variant": "#2a2522",
+              "tertiary": "#ff937f",
+              "on-tertiary-fixed": "#380300",
+              "error-dim": "#d73357",
+              "on-background": "#fffbff",
+              "surface-container-low": "#171210",
+              "on-secondary-fixed": "#572600",
+              "on-primary-container": "#490b00",
+              "inverse-surface": "#fff8f5",
+              "outline": "#7b7471",
+              "primary-fixed": "#ff7856",
+              "surface-container-high": "#241f1c",
+              "surface-dim": "#110d0c",
+              "primary": "#ff8f73",
+              "primary-fixed-dim": "#fa613b",
+              "tertiary-dim": "#f47a63",
+              "tertiary-container": "#fb7f68",
+              "primary-dim": "#ff734f",
+              "surface-container": "#1d1916",
+              "primary-container": "#ff7856",
+              "on-tertiary": "#630f04",
+              "outline-variant": "#4c4744",
+              "surface": "#110d0c",
+              "on-secondary-fixed-variant": "#833d00",
+              "on-error": "#490013",
+              "tertiary-fixed-dim": "#fb7f68",
+              "inverse-primary": "#b22e09",
+              "on-secondary": "#4b2000",
+              "surface-container-highest": "#2a2522",
+              "surface-bright": "#312b28",
+              "on-primary-fixed-variant": "#5a1000"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Manrope"],
+              "label": ["Manrope"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .spice-gradient {
+            background: linear-gradient(135deg, #ff8f73 0%, #ff7856 100%);
+        }
+        .glass-panel {
+            background: rgba(42, 37, 34, 0.8);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#171210] dark:bg-[#171210] flex flex-col h-full p-6 no-border space-y-4 z-50">
+<div class="mb-10 px-4">
+<h1 class="text-xl font-bold text-[#ff8f73]">The Dark Spice</h1>
+<p class="font-manrope text-sm font-medium tracking-wide text-[#fffbff] opacity-60">Ethiopian Editorial</p>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Active Tab: Dashboard -->
+<a class="bg-[#241f1c] text-[#ff8f73] rounded-lg px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-manrope text-sm font-medium tracking-wide">Dashboard</span>
+</a>
+<a class="text-[#fffbff] opacity-60 hover:opacity-100 hover:bg-[#241f1c] hover:text-[#ff8f73] px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span class="font-manrope text-sm font-medium tracking-wide">Recipes</span>
+</a>
+<a class="text-[#fffbff] opacity-60 hover:opacity-100 hover:bg-[#241f1c] hover:text-[#ff8f73] px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-manrope text-sm font-medium tracking-wide">My Cookbook</span>
+</a>
+</nav>
+<div class="mt-auto space-y-2 pt-6">
+<button class="w-full spice-gradient text-on-primary font-bold py-3 rounded-xl mb-6 shadow-[0_32px_64px_rgba(255,143,115,0.06)] active:scale-95 duration-200">
+                Add New Recipe
+            </button>
+<a class="text-[#fffbff] opacity-60 hover:opacity-100 px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-manrope text-sm font-medium tracking-wide">Help</span>
+</a>
+<a class="text-[#fffbff] opacity-60 hover:opacity-100 px-4 py-3 flex items-center gap-3 transition-all duration-300 ease-in-out" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-manrope text-sm font-medium tracking-wide">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen bg-background relative overflow-x-hidden">
+<!-- TopAppBar (Authority: JSON) -->
+<header class="w-full top-0 sticky bg-[#110d0c] dark:bg-[#110d0c] flex justify-between items-center px-8 py-4 w-full z-40 shadow-[0_32px_64px_rgba(255,143,115,0.06)]">
+<div class="flex items-center gap-6 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-1 focus:ring-primary/20 text-on-surface placeholder:text-on-surface-variant/50 transition-all" placeholder="Search spices, recipes, or ingredients..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="p-2 text-[#fffbff] opacity-70 hover:bg-[#241f1c] transition-colors duration-300 rounded-full active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-[#fffbff] opacity-70 hover:bg-[#241f1c] transition-colors duration-300 rounded-full active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full bg-surface-container-high border-2 border-primary/20 overflow-hidden">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgaZARk_gjMw5KkxXmRAq6yTKo_EiysQ4aRt_ZF279_CB9CnF7jSPkUrMtzjGA7XL1FMlU9fi1N8Hovdm-Q-xbtZV6mG1wNcA-TXGN_j82GhsEJaxcbFMKTFYeCiLfLescaPnq6z5evzcSTYvnUnHX22DbZxHX4YQCFTWr2mf_xpA52_cl3VkpoCOolrxWtUcwqehijvJyK2-ZJGWVOGL-c7n06e-E9N2B-n5l1GJXdFF_gljUV17bdsoXOXASbW1co_Vf7UIrB_RQ"/>
+</div>
+</div>
+</header>
+<div class="p-10 max-w-7xl mx-auto space-y-12">
+<!-- Hero Greeting & Bento Grid -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Welcome Section -->
+<div class="lg:col-span-8 space-y-8">
+<div class="space-y-2">
+<h2 class="text-5xl font-extrabold tracking-tight text-on-surface">Selam, Chef Elias.</h2>
+<p class="text-on-surface-variant text-lg max-w-lg">The kitchen is warm and the berbere is fresh. What are we creating today?</p>
+</div>
+<!-- Pantry Tool Card -->
+<div class="bg-surface-container-low p-8 rounded-xl relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-20 -mt-20 blur-3xl group-hover:bg-primary/10 transition-colors duration-500"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="space-y-4">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold tracking-widest uppercase px-3 py-1 rounded-full">Intelligent Pantry</span>
+<h3 class="text-2xl font-bold">Ingredient Alchemist</h3>
+<p class="text-on-surface-variant max-w-md">Input what's in your pantry, and we'll craft a traditional Ethiopian masterpiece for you.</p>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-high text-on-surface px-4 py-2 rounded-full text-sm flex items-center gap-2">
+                                        Lentils <span class="material-symbols-outlined text-xs">close</span>
+</span>
+<span class="bg-surface-container-high text-on-surface px-4 py-2 rounded-full text-sm flex items-center gap-2">
+                                        Injera <span class="material-symbols-outlined text-xs">close</span>
+</span>
+<button class="bg-surface-container-highest text-primary px-4 py-2 rounded-full text-sm font-bold">+ Add Item</button>
+</div>
+</div>
+<button class="spice-gradient text-on-primary h-24 w-24 rounded-full flex items-center justify-center flex-col gap-1 shadow-lg active:scale-90 transition-transform">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-[10px] font-black uppercase">Brew</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Chef's Secret Side Panel -->
+<div class="lg:col-span-4 space-y-8">
+<div class="bg-surface-container-high p-8 rounded-xl border-l-4 border-primary">
+<div class="flex items-center gap-3 mb-6 text-primary">
+<span class="material-symbols-outlined">lightbulb</span>
+<h4 class="font-bold tracking-tight">Chef's Secret</h4>
+</div>
+<p class="text-on-surface leading-relaxed mb-6 italic">
+                            "To achieve the deepest color in your Doro Wat without burning the onions, add a splash of water every 5 minutes during the initial slow-sweat process. The caramelization should take 45 minutes."
+                        </p>
+<div class="pt-6 border-t border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary"></div>
+<div>
+<p class="text-xs font-bold">Master Chef Marcus</p>
+<p class="text-[10px] text-on-surface-variant">Editorial Contributor</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recommendations Section -->
+<section class="space-y-8">
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<h3 class="text-2xl font-bold tracking-tight">Daily Inspiration</h3>
+<p class="text-on-surface-variant text-sm">Curated recipes based on your spice profile</p>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-2 hover:gap-3 transition-all">
+                        View Editorial <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Recipe Card 1 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[4/5] rounded-xl overflow-hidden mb-4 shadow-2xl">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Close up of a vibrant red Ethiopian stew with egg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWzOqFlIpboNdR0Z80VGyr3x7HG_JCtczXEznlPmg8G3-N5xvHHnqvnvA1CfDirCPL4ofFjm0PJYezxXInqZ5SmN6mVgrVxs_zXiAvl-meiTlZaNf_oNxT43enUfjKu07ibQSq7nIfnXNoGfpZqZ9Bn6TUGNHK-Dq4to3amAMkpYYtF-oAA8IPRkRXwYru4GT0B2G61nKwvSPQMYT0UrSSLPYoYCeL-6Jj7jTHvUAaj0N7TLgZcuGGOpphZl8_WO2WSBNEvXtrdXI7"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="flex gap-2 mb-2">
+<span class="bg-primary/20 backdrop-blur-md text-primary text-[10px] font-bold px-2 py-1 rounded">SPICY</span>
+<span class="bg-surface-container-high/40 backdrop-blur-md text-on-surface text-[10px] font-bold px-2 py-1 rounded">45 MIN</span>
+</div>
+<h4 class="text-xl font-bold text-on-surface">Signature Doro Wat</h4>
+</div>
+</div>
+<div class="space-y-2">
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full spice-gradient w-[85%]"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">
+<span>Heat Intensity</span>
+<span class="text-primary">8.5/10</span>
+</div>
+</div>
+</div>
+<!-- Recipe Card 2 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[4/5] rounded-xl overflow-hidden mb-4 shadow-2xl">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Traditional Ethiopian injera platter with various vegetable side dishes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAy0xjb6EkxXXJkcG_x-58ji8nAglDHGxZr8xKmGNRZr5OIUKJz_UKspV21Ng8rm-FjiAMO87kmGwveLtHFgsXQi11CKS3Klxf_dlSvTQa-LOhILtTa3vN_Li9-2JEezP-TT6tbdC5ZRn7GxrgC3fi54Byh1Z1fH7471n9qVgyDnJYadijHBE2eKqbVKbNhQ9NRawcu69DG8W1cK2-Mjid16WlAfChTGfNF4pNOycVYvOKim2A4B_3i1m_UYDWmVWHQQn9riLCB6alH"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="flex gap-2 mb-2">
+<span class="bg-tertiary/20 backdrop-blur-md text-tertiary text-[10px] font-bold px-2 py-1 rounded">VEGAN</span>
+<span class="bg-surface-container-high/40 backdrop-blur-md text-on-surface text-[10px] font-bold px-2 py-1 rounded">30 MIN</span>
+</div>
+<h4 class="text-xl font-bold text-on-surface">Misir Wot Platter</h4>
+</div>
+</div>
+<div class="space-y-2">
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[40%]"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">
+<span>Heat Intensity</span>
+<span class="text-secondary">4.0/10</span>
+</div>
+</div>
+</div>
+<!-- Recipe Card 3 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[4/5] rounded-xl overflow-hidden mb-4 shadow-2xl">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Ethiopian coffee ceremony setup with small cups and roasting pan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFxu2imm7bb-rxj-yws6Txq_h_PDaiI6jsSzMArmXH7y5LzCDdJUIrDbYTbt-2uU_8g9ut00DFNVNnFQBgYIPPAcBfbNjwQn2ACfoazM2quO5I9REpwVJ6uppWWmOLfxFCg38sX4iKnfsr7ndqZMFHTfZWg4hLwRr0dFEl3Jwn_r_FgBjxBM7a9ZzRE-YS-egBL6TnYwhUC_6QbHH0bR3fI5C_eLJuDKA5E4_8jph0XB8ydDjAMMoLpELfbh_cRirGIqaq5HQrv-99"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-80"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<div class="flex gap-2 mb-2">
+<span class="bg-secondary/20 backdrop-blur-md text-secondary text-[10px] font-bold px-2 py-1 rounded">CEREMONY</span>
+<span class="bg-surface-container-high/40 backdrop-blur-md text-on-surface text-[10px] font-bold px-2 py-1 rounded">20 MIN</span>
+</div>
+<h4 class="text-xl font-bold text-on-surface">Sidamo Coffee Ritual</h4>
+</div>
+</div>
+<div class="space-y-2">
+<div class="w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-outline w-[10%]"></div>
+</div>
+<div class="flex justify-between text-[10px] font-bold text-on-surface-variant tracking-widest uppercase">
+<span>Heat Intensity</span>
+<span>Mild</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Secondary Bento Row -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-surface-container-lowest p-8 rounded-xl flex items-center gap-8 border border-outline-variant/5 hover:border-primary/20 transition-all">
+<div class="h-20 w-20 flex-shrink-0 bg-surface-container-high rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="menu_book" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<div class="space-y-2">
+<h5 class="font-bold text-lg">Continue Reading</h5>
+<p class="text-sm text-on-surface-variant">"The History of Tef: From Ancient Grains to Global Superfood"</p>
+<div class="pt-2">
+<span class="text-[10px] font-black text-secondary uppercase tracking-widest">Chapter 4 of 12</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-xl flex items-center gap-8 border border-outline-variant/5 hover:border-primary/20 transition-all">
+<div class="h-20 w-20 flex-shrink-0 bg-surface-container-high rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-secondary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+<div class="space-y-2">
+<h5 class="font-bold text-lg">Spice Master Rank</h5>
+<p class="text-sm text-on-surface-variant">You've mastered 14/20 primary Ethiopian spices. Complete 'Korerima' to level up.</p>
+<div class="pt-2">
+<span class="text-[10px] font-black text-primary uppercase tracking-widest">Level 3: Berbere Enthusiast</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Action Element (Optional, contextual) -->
+<div class="fixed bottom-8 right-8 z-50 md:hidden">
+<button class="spice-gradient h-16 w-16 rounded-full shadow-2xl flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</body></html>
