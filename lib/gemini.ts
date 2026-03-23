@@ -86,7 +86,8 @@ export async function generateEthiopianRecipe(
   preferences: RecipePreferences = {},
   apiKey?: string
 ): Promise<GeneratedRecipe> {
-  const key = apiKey ?? process.env.GEMINI_API_KEY;
+  // const key = apiKey ?? process.env.GEMINI_API_KEY;
+  const key = apiKey;
   if (!key) throw new Error("No Gemini API key available. Please add your API key in Account settings.");
 
 

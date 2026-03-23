@@ -28,9 +28,9 @@ export async function POST(req: NextRequest) {
   }
 
   // Fall back to env key if user hasn't set one
-  if (!resolvedApiKey) {
-    resolvedApiKey = process.env.GEMINI_API_KEY;
-  }
+  // if (!resolvedApiKey) {
+  //   resolvedApiKey = process.env.GEMINI_API_KEY;
+  // }
 
   // If there's genuinely no key anywhere, return a friendly error
   if (!resolvedApiKey) {
