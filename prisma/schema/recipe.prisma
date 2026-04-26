@@ -6,15 +6,36 @@ model Recipe {
   cookTime    String?  @map("cook_time") @db.VarChar(50)
   servings    String?  @db.VarChar(50)
   recipeData  Json     @map("recipe_data") @db.JsonB
+  nutritionalFacts Json? @map("nutritional_facts") @db.JsonB
   createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
   updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   // Reverse relations to the SavedRecipe pivot
   savedBy     SavedRecipe[]
+  recipeAm    RecipeAm?
   
   // Optionally, store an array/string of main ingredients or tags to make DB queries easier 
   // without having to parse recipeData in postgres JSON functions
   ingredients String[] @default([])
+}
+
+model RecipeAm {
+  id               Int      @id @default(autoincrement())
+  recipeId         Int      @unique @map("recipe_id")
+  name             String   @db.VarChar(255)
+  difficulty       String?  @db.VarChar(50)
+  prepTime         String?  @map("prep_time") @db.VarChar(50)
+  cookTime         String?  @map("cook_time") @db.VarChar(50)
+  servings         String?  @db.VarChar(50)
+  recipeData       Json     @map("recipe_data") @db.JsonB
+  ingredients String[] @default([])
+  nutritionalFacts Json?    @map("nutritional_facts") @db.JsonB
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  recipe           Recipe   @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  @@map("recipes_am")
 }
 
 model SavedRecipe {
