@@ -15,9 +15,15 @@ export async function GET(
     return NextResponse.json({ error: "Invalid recipe ID" }, { status: 400 });
   }
 
+  const userLocale = req.cookies.get("NEXT_LOCALE")?.value || "en";
+  const isAm = userLocale === "am";
+
   try {
     const recipe = await db.recipe.findUnique({
       where: { id: recipeId },
+      include: {
+        recipeAm: isAm,
+      },
     });
 
     if (!recipe) {
@@ -39,19 +45,20 @@ export async function GET(
       isSaved = !!saved;
     }
 
-    const data = recipe.recipeData as Record<string, unknown> | null;
+    const source = isAm && recipe.recipeAm ? recipe.recipeAm : recipe;
+    const data = source.recipeData as Record<string, unknown> | null;
 
     return NextResponse.json({
       id: recipe.id,
-      name: recipe.name,
-      difficulty: recipe.difficulty,
-      prepTime: recipe.prepTime,
-      cookTime: recipe.cookTime,
-      servings: recipe.servings,
-      ingredients: recipe.ingredients,
-      createdAt: recipe.createdAt,
+      name: source.name,
+      difficulty: source.difficulty,
+      prepTime: source.prepTime,
+      cookTime: source.cookTime,
+      servings: source.servings,
+      ingredients: source.ingredients,
+      createdAt: source.createdAt,
       // Fields from recipeData JSON
-      title: (data?.title as string) ?? recipe.name,
+      title: (data?.title as string) ?? source.name,
       category: (data?.category as string) ?? "",
       region: (data?.region as string) ?? "",
       spiceLevel: (data?.spiceLevel as string) ?? "medium",

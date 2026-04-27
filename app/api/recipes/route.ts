@@ -11,35 +11,38 @@ export async function GET(req: NextRequest) {
   const limit = Math.min(24, Math.max(1, parseInt(searchParams.get("limit") ?? "12", 10)));
   const skip = (page - 1) * limit;
 
-  try {
-    type WhereClause = {
-      AND?: Array<
-        | { name: { contains: string; mode: "insensitive" } }
-        | { ingredients: { hasSome: string[] } }
-        | { difficulty: { equals: string; mode: "insensitive" } }
-      >;
-      difficulty?: { equals: string; mode: "insensitive" };
-    };
+  const userLocale = req.cookies.get("NEXT_LOCALE")?.value || "en";
+  const isAm = userLocale === "am";
 
-    const andClauses: NonNullable<WhereClause["AND"]> = [];
+  try {
+    type PrismaWhereInput = Record<string, unknown>;
+    
+    // Build OR clauses for search
+    const orClauses: PrismaWhereInput[] = [];
 
     if (q.length >= 2) {
       const tokens = q.toLowerCase().split(/\s+/).filter(Boolean);
       const ingredientTerms = [q.toLowerCase(), ...tokens];
-      andClauses.push({
-        // @ts-expect-error — Prisma OR nested in AND
-        OR: [
-          { name: { contains: q, mode: "insensitive" } },
-          { ingredients: { hasSome: ingredientTerms } },
-        ],
-      });
+      
+      orClauses.push({ name: { contains: q, mode: "insensitive" } });
+      orClauses.push({ ingredients: { hasSome: ingredientTerms } });
+      
+      if (isAm) {
+        orClauses.push({ recipeAm: { name: { contains: q, mode: "insensitive" } } });
+        orClauses.push({ recipeAm: { ingredients: { hasSome: ingredientTerms } } });
+      }
+    }
+
+    const andClauses: PrismaWhereInput[] = [];
+    if (orClauses.length > 0) {
+      andClauses.push({ OR: orClauses });
     }
 
     if (difficulty) {
       andClauses.push({ difficulty: { equals: difficulty, mode: "insensitive" } });
     }
 
-    const where = andClauses.length > 0 ? { AND: andClauses } : {};
+    const where: PrismaWhereInput = andClauses.length > 0 ? { AND: andClauses, generatedBy: null } : { generatedBy: null };
 
     const [recipes, total] = await Promise.all([
       db.recipe.findMany({
@@ -47,31 +50,28 @@ export async function GET(req: NextRequest) {
         take: limit,
         skip,
         orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          name: true,
-          difficulty: true,
-          prepTime: true,
-          cookTime: true,
-          servings: true,
-          ingredients: true,
-          recipeData: true,
-          createdAt: true,
+        // omit select to allow including relation
+        include: {
+          recipeAm: isAm,
         },
       }),
       db.recipe.count({ where }),
     ]);
 
-    const results = recipes.map((r) => {
-      const data = r.recipeData as Record<string, unknown> | null;
+    const results = recipes.map((r: any) => {
+      // Fallback to English if Amharic translation missing
+      const source = isAm && r.recipeAm ? r.recipeAm : r;
+      const data = source.recipeData as Record<string, unknown> | null;
+      
+      // We always return the English primary `id` so client routing doesn't break
       return {
         id: r.id,
-        name: r.name,
-        difficulty: r.difficulty,
-        prepTime: r.prepTime,
-        cookTime: r.cookTime,
-        servings: r.servings,
-        ingredients: r.ingredients.slice(0, 5),
+        name: source.name,
+        difficulty: source.difficulty,
+        prepTime: source.prepTime,
+        cookTime: source.cookTime,
+        servings: source.servings,
+        ingredients: source.ingredients.slice(0, 5),
         spiceLevel: (data?.spiceLevel as string) ?? "medium",
         isVegan: (data?.isVegan as boolean) ?? false,
         category: (data?.category as string) ?? "",

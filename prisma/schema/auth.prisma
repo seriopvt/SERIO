@@ -10,6 +10,8 @@ model User {
   sessions      Session[]
   savedRecipes  SavedRecipe[]
   activityLogs  ActivityLog[]
+  generatedRecipes    Recipe[]   @relation("RecipeGeneratedBy")
+  generatedRecipesAm  RecipeAm[] @relation("RecipeAmGeneratedBy")
 }
 
 model Account {

@@ -5,14 +5,26 @@ import { Bell, Plus, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import Link from "next/link";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface HeaderProps {
+  // raw server props, but we'll override if needed or just parse them
   greeting: string;
   subtitle: string;
   hasApiKey?: boolean;
 }
 
 export default function Header({ greeting, subtitle, hasApiKey }: HeaderProps) {
+  const { t, locale, setLocale } = useI18n();
+
+  // We can try to extract parts from greeting or just rely entirely on translation
+  // The layout passes "Good {timeOfDay}, {firstName}!". We can parse the name out.
+  const timeMatch = greeting.match(/Good (Morning|Afternoon|Evening)/);
+  const nameMatch = greeting.match(/, (.*?)(!|$)/);
+  
+  const timeOfDay = timeMatch ? timeMatch[1] : "Morning";
+  const firstName = nameMatch ? nameMatch[1] : "Chef";
+
   return (
     <header
       className="
@@ -39,21 +51,41 @@ export default function Header({ greeting, subtitle, hasApiKey }: HeaderProps) {
             "
           >
             <AlertCircle size={14} className="text-amber-600 dark:text-amber-500" />
-            Missing Gemini API Key
+            {t("header.missingKey")}
           </Link>
         </div>
       )}
 
       <div>
         <h2 className="text-[var(--text-xl)] font-bold text-[var(--color-neutral-900)]">
-          {greeting}
+          {t("header.greeting", { timeOfDay, name: firstName })}
         </h2>
         <p className="text-[var(--text-base)] text-[var(--color-brand-primary)]">
-          {subtitle}
+          {t("header.subtitle")}
         </p>
       </div>
 
       <div className="flex items-center gap-3">
+        <div className="flex bg-[var(--color-neutral-100)] dark:bg-[var(--color-neutral-800)] p-1 rounded-full items-center">
+          <button
+            onClick={() => setLocale("en")}
+            className={`
+              px-3 py-1 rounded-full text-xs font-semibold transition-colors duration-200 cursor-pointer
+              ${locale === "en" ? "bg-white dark:bg-[var(--color-neutral-700)] text-[var(--color-neutral-900)] shadow-sm" : "text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-900)]"}
+            `}
+          >
+            {t("lang.en")}
+          </button>
+          <button
+            onClick={() => setLocale("am")}
+            className={`
+              px-3 py-1 rounded-full text-xs font-semibold transition-colors duration-200 cursor-pointer
+              ${locale === "am" ? "bg-white dark:bg-[var(--color-neutral-700)] text-[var(--color-neutral-900)] shadow-sm" : "text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-900)]"}
+            `}
+          >
+            {t("lang.am")}
+          </button>
+        </div>
         <ThemeToggle />
         {/* <Button variant="icon" size="md">
           <Bell size={18} />

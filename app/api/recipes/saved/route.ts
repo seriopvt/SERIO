@@ -5,11 +5,14 @@ import { auth } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 // GET /api/recipes/saved — returns current user's saved recipes
-export async function GET() {
+export async function GET(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const userLocale = req.cookies.get("NEXT_LOCALE")?.value || "en";
+  const isAm = userLocale === "am";
 
   try {
     const saved = await db.savedRecipe.findMany({
@@ -17,31 +20,24 @@ export async function GET() {
       orderBy: { createdAt: "desc" },
       include: {
         recipe: {
-          select: {
-            id: true,
-            name: true,
-            difficulty: true,
-            prepTime: true,
-            cookTime: true,
-            servings: true,
-            ingredients: true,
-            recipeData: true,
-            createdAt: true,
+          include: {
+            recipeAm: isAm,
           },
         },
       },
     });
 
     const results = saved.map(({ recipe }) => {
-      const data = recipe.recipeData as Record<string, unknown> | null;
+      const source = isAm && (recipe as any).recipeAm ? (recipe as any).recipeAm : recipe;
+      const data = source.recipeData as Record<string, unknown> | null;
       return {
         id: recipe.id,
-        name: recipe.name,
-        difficulty: recipe.difficulty,
-        prepTime: recipe.prepTime,
-        cookTime: recipe.cookTime,
-        servings: recipe.servings,
-        ingredients: recipe.ingredients.slice(0, 5),
+        name: source.name,
+        difficulty: source.difficulty,
+        prepTime: source.prepTime,
+        cookTime: source.cookTime,
+        servings: source.servings,
+        ingredients: source.ingredients.slice(0, 5),
         spiceLevel: (data?.spiceLevel as string) ?? "medium",
         isVegan: (data?.isVegan as boolean) ?? false,
         category: (data?.category as string) ?? "",

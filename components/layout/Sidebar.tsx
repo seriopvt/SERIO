@@ -12,6 +12,7 @@ import {
   ChefHat,
 } from "lucide-react";
 import { Avatar } from "@/components/ui";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -68,6 +69,7 @@ export default function Sidebar({
   userEmail = "",
   hasApiKey = true,
 }: SidebarProps) {
+  const { t } = useI18n();
   const initials = userName ? getInitials(userName) : "??";
   const displayName = userName ? getDisplayName(userName) : userEmail || "User";
   const pathname = usePathname();
@@ -96,7 +98,7 @@ export default function Sidebar({
               SERIO
             </h1>
             <p className="text-[10px] text-[var(--color-neutral-600)] tracking-wider uppercase">
-              Ethiopian Kitchen
+              {t("sidebar.ethiopiankitchen")}
             </p>
           </div>
         </Link>
@@ -105,18 +107,18 @@ export default function Sidebar({
         <nav className="flex flex-col gap-1">
           <SidebarItem
             icon={<LayoutDashboard size={18} />}
-            label="Dashboard"
+            label={t("nav.dashboard")}
             href="/home"
             exact
           />
           <SidebarItem
             icon={<UtensilsCrossed size={18} />}
-            label="Recipes"
+            label={t("nav.recipes")}
             href="/home/recipes"
           />
           <SidebarItem
             icon={<BookOpen size={18} />}
-            label="My Cookbook"
+            label={t("nav.cookbook")}
             href="/home/cookbook"
           />
         </nav>
@@ -139,7 +141,7 @@ export default function Sidebar({
               {displayName}
             </p>
             <p className="text-[var(--text-xs)] text-[var(--color-neutral-500)]">
-              {hasApiKey ? "Pro Member" : "Setup needed"}
+              {hasApiKey ? t("sidebar.promember") : t("sidebar.setupneeded")}
             </p>
           </div>
           <ChevronDown size={13} className="text-[var(--color-neutral-500)] shrink-0" />

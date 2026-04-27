@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generateEthiopianRecipe as generateWithGemini, RecipePreferences } from "@/lib/gemini";
+import { generateEthiopianRecipe as generateWithGemini, GeneratedRecipe, RecipePreferences } from "@/lib/gemini";
 import { generateEthiopianRecipe as generateWithOpenRouter } from "@/lib/openrouter";
 import { db } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
   }
 
   // ── 2. Generate via Gemini (with user's key) ─────────────────────────
-  let generatedRecipe;
+  let generatedRecipe: GeneratedRecipe;
   const rawIngredients = (ingredients as string[]).map((s) => s.trim()).filter(Boolean);
 
   try {
@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
     console.warn("[/api/recipes/generate] Gemini failed. Trying OpenRouter fallback...", errorMsg);
 
     try {
-      generatedRecipe = await generateWithOpenRouter(rawIngredients, preferences ?? {});
+      generatedRecipe = await generateWithOpenRouter(rawIngredients, preferences ?? {}) as unknown as GeneratedRecipe;
     } catch (openRouterErr) {
       const finalMsg =
         openRouterErr instanceof Error ? openRouterErr.message : "AI generation failed";
@@ -177,6 +177,8 @@ export async function POST(req: NextRequest) {
         name: generatedRecipe.title,
         ingredients: cleanIngredients,
         recipeData: generatedRecipe as any,
+        nutritionalFacts: generatedRecipe.nutritionalFacts as any,
+        generatedBy: session?.user?.id ?? null,
         difficulty:
           generatedRecipe.time > 60 ? "Hard" : generatedRecipe.time > 30 ? "Medium" : "Easy",
         prepTime: `${Math.round(generatedRecipe.time * 0.3)}m`,
@@ -184,6 +186,35 @@ export async function POST(req: NextRequest) {
         servings: generatedRecipe.servings.toString(),
       },
     });
+
+    // ── 4. Save Amharic translation to RecipeAm ────────────────────────
+    const am = generatedRecipe.amharicVersion;
+    try {
+      await db.recipeAm.upsert({
+        where:  { recipeId: savedInDb.id },
+        create: {
+          recipeId:        savedInDb.id,
+          name:            am.title,
+          recipeData:      am as any,
+          ingredients:     cleanIngredients,
+          generatedBy:     session?.user?.id ?? null,
+          difficulty:
+            am.time > 60 ? "Hard" : am.time > 30 ? "Medium" : "Easy",
+          prepTime:        `${Math.round(am.time * 0.3)}m`,
+          cookTime:        `${Math.round(am.time * 0.7)}m`,
+          servings:        am.servings.toString(),
+          nutritionalFacts: am.nutritionalFacts as any,
+        },
+        update: {
+          name:            am.title,
+          recipeData:      am as any,
+          nutritionalFacts: am.nutritionalFacts as any,
+        },
+      });
+    } catch (amErr) {
+      console.error("[/api/recipes/generate] Failed to save Amharic translation:", amErr);
+      // Non-fatal — the English recipe is already saved
+    }
 
     return NextResponse.json(
       {
