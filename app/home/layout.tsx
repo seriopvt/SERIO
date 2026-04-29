@@ -3,12 +3,19 @@ import { Sidebar, Header } from "@/components/layout";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/prisma";
+import { cookies } from "next/headers";
+import { getTranslation, Locale } from "@/lib/i18n/translations";
 
 export default async function HomeLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const locale: Locale = cookieLocale === "am" || cookieLocale === "en" ? (cookieLocale as Locale) : "en";
+  const t = (key: string, params?: Record<string, string>) => getTranslation(locale, key, params);
+
   const session = await auth();
 
   if (!session?.user) {
@@ -24,7 +31,7 @@ export default async function HomeLayout({
       ? "Afternoon"
       : "Evening";
 
-  const firstName = session.user.name?.split(" ")[0] ?? "Chef";
+  const firstName = session.user.name?.split(" ")[0] ?? t("common.chef");
 
   // Check whether the user has set their Gemini API key
   // Wrapped in try/catch so the layout never crashes if the column doesn't exist yet
@@ -51,8 +58,8 @@ export default async function HomeLayout({
       />
       <main className="flex-1 ml-[var(--sidebar-width)] bg-[var(--color-surface-page)] transition-colors duration-300">
         <Header
-          greeting={`Good ${timeOfDay}, ${firstName}!`}
-          subtitle="Ready to cook something authentic today?"
+          timeOfDay={timeOfDay}
+          name={firstName}
           hasApiKey={hasApiKey}
         />
         <div className="p-8">{children}</div>

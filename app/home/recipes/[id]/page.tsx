@@ -16,6 +16,22 @@ import {
   MapPin,
   CheckCircle2,
 } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
+
+interface NutritionalFacts {
+  serving_size: string;
+  calories: number;
+  protein_g: number;
+  carbs_g: number;
+  fat_g: number;
+  fiber_g: number;
+  sugar_g: number;
+  saturated_fat_g: number;
+  trans_fat_g: number;
+  cholesterol_mg: number;
+  sodium_mg: number;
+  as_displayed: string;
+}
 
 interface RecipeDetail {
   id: number;
@@ -33,6 +49,7 @@ interface RecipeDetail {
   ingredients: string[];
   steps: string[];
   tip?: string | null;
+  nutritionalFacts?: NutritionalFacts | null;
   isSaved: boolean;
 }
 
@@ -63,6 +80,7 @@ const CARD_MOTIFS = ["🍲", "🌿", "🫘", "🌶️", "🧅", "🥘"];
 export default function RecipeDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const { locale, t } = useI18n();
 
   const [recipe, setRecipe] = useState<RecipeDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -75,7 +93,7 @@ export default function RecipeDetailPage() {
     setLoading(true);
     fetch(`/api/recipes/${id}`)
       .then((r) => {
-        if (!r.ok) throw new Error("Recipe not found");
+        if (!r.ok) throw new Error(t("recipeDetail.notFound"));
         return r.json();
       })
       .then((data) => {
@@ -84,7 +102,7 @@ export default function RecipeDetailPage() {
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, locale]);
 
   const handleSave = useCallback(async () => {
     if (!recipe) return;
@@ -154,12 +172,12 @@ export default function RecipeDetailPage() {
   if (error || !recipe) {
     return (
       <div className="text-center py-24">
-        <p className="text-[var(--color-error)] text-[var(--text-lg)] mb-4">{error ?? "Recipe not found"}</p>
+        <p className="text-[var(--color-error)] text-[var(--text-lg)] mb-4">{error ?? t("recipeDetail.notFound")}</p>
         <button
           onClick={() => router.push("/home/recipes")}
           className="text-[var(--color-brand-primary)] hover:underline text-[var(--text-base)] cursor-pointer"
         >
-          ← Back to Recipes
+          {t("recipeDetail.backToRecipes")}
         </button>
       </div>
     );
@@ -189,7 +207,7 @@ export default function RecipeDetailPage() {
         "
       >
         <ArrowLeft size={14} />
-        Back
+        {t("recipeDetail.back")}
       </button>
 
       {/* ── Hero Banner ── */}
@@ -280,7 +298,7 @@ export default function RecipeDetailPage() {
               {recipe.isVegan && (
                 <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[var(--text-sm)] font-semibold bg-green-50 text-green-600">
                   <Leaf size={12} fill="currentColor" />
-                  Vegan
+                  {t("recipeDetail.vegan")}
                 </span>
               )}
             </div>
@@ -315,11 +333,11 @@ export default function RecipeDetailPage() {
           `}
         >
           {saveStatus === "saving" || saveStatus === "unsaving" ? (
-            <><Loader2 size={16} className="animate-spin" />{saveStatus === "saving" ? "Saving…" : "Removing…"}</>
+            <><Loader2 size={16} className="animate-spin" />{saveStatus === "saving" ? t("common.saving") : t("common.removing")}</>
           ) : saveStatus === "saved" ? (
-            <><BookmarkCheck size={16} />Saved to Cookbook</>
+            <><BookmarkCheck size={16} />{t("recipeDetail.saved")}</>
           ) : (
-            <><Bookmark size={16} />Save to Cookbook</>
+            <><Bookmark size={16} />{t("recipeDetail.save")}</>
           )}
         </button>
       </div>
@@ -334,7 +352,7 @@ export default function RecipeDetailPage() {
             <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] p-6 mb-6">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-[var(--text-lg)] font-extrabold text-[var(--color-neutral-900)]">
-                  Instructions
+                  {t("recipeDetail.instructions")}
                 </h2>
                 <span className="text-[var(--text-sm)] font-semibold text-[var(--color-neutral-500)]">
                   {completedCount}/{totalSteps} done
@@ -432,7 +450,7 @@ export default function RecipeDetailPage() {
               </div>
               <div>
                 <p className="text-[var(--text-sm)] font-extrabold uppercase tracking-wider mb-1.5" style={{ color: spice.color }}>
-                  Chef&apos;s Tip
+                  {t("recipeDetail.tip")}
                 </p>
                 <p className="text-[var(--text-base)] text-[var(--color-neutral-700)] leading-relaxed">
                   {recipe.tip}
@@ -444,7 +462,7 @@ export default function RecipeDetailPage() {
 
         {/* RIGHT: Ingredients */}
         <div className="sticky top-8">
-          <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden">
+          <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden mb-6">
             {/* Header */}
             <div
               className="px-6 py-5 flex items-center gap-3"
@@ -461,7 +479,7 @@ export default function RecipeDetailPage() {
               </div>
               <div>
                 <h2 className="text-[var(--text-md)] font-extrabold text-[var(--color-neutral-900)]">
-                  Ingredients
+                  {t("recipeDetail.ingredients")}
                 </h2>
                 <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)]">
                   {recipe.ingredients.length} items
@@ -484,6 +502,75 @@ export default function RecipeDetailPage() {
               ))}
             </ul>
           </div>
+
+          {/* Nutrition */}
+          {recipe.nutritionalFacts && (
+            <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-2xl)] border border-[var(--color-neutral-100)] shadow-[var(--shadow-sm)] overflow-hidden">
+              <div
+                className="px-6 py-5 flex items-center gap-3"
+                style={{
+                  background: `linear-gradient(135deg, color-mix(in srgb, ${spice.color} 8%, var(--color-surface-card)), color-mix(in srgb, ${spice.color} 4%, var(--color-surface-card)))`,
+                  borderBottom: `1px solid color-mix(in srgb, ${spice.color} 15%, var(--color-surface-card))`,
+                }}
+              >
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center"
+                  style={{ background: spice.bg }}
+                >
+                  <Flame size={17} style={{ color: spice.color }} />
+                </div>
+                <div>
+                  <h2 className="text-[var(--text-md)] font-extrabold text-[var(--color-neutral-900)]">
+                    {t("recipeDetail.nutritionTitle")}
+                  </h2>
+                  <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)]">
+                    {t("recipeDetail.nutritionPer", { serving: recipe.nutritionalFacts.serving_size })}
+                  </p>
+                </div>
+              </div>
+
+              <div className="px-6 py-5">
+                <p className="text-[var(--text-sm)] text-[var(--color-neutral-600)] leading-relaxed mb-4">
+                  {recipe.nutritionalFacts.as_displayed}
+                </p>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-[var(--radius-xl)] border border-[var(--color-neutral-100)] p-3">
+                    <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] font-semibold uppercase tracking-wider">
+                      {t("recipeDetail.nutrition.calories")}
+                    </p>
+                    <p className="text-[var(--text-lg)] font-extrabold text-[var(--color-neutral-900)]">
+                      {Math.round(recipe.nutritionalFacts.calories)}
+                    </p>
+                  </div>
+                  <div className="rounded-[var(--radius-xl)] border border-[var(--color-neutral-100)] p-3">
+                    <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] font-semibold uppercase tracking-wider">
+                      {t("recipeDetail.nutrition.protein")}
+                    </p>
+                    <p className="text-[var(--text-lg)] font-extrabold text-[var(--color-neutral-900)]">
+                      {recipe.nutritionalFacts.protein_g.toFixed(1)}g
+                    </p>
+                  </div>
+                  <div className="rounded-[var(--radius-xl)] border border-[var(--color-neutral-100)] p-3">
+                    <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] font-semibold uppercase tracking-wider">
+                      {t("recipeDetail.nutrition.carbs")}
+                    </p>
+                    <p className="text-[var(--text-lg)] font-extrabold text-[var(--color-neutral-900)]">
+                      {recipe.nutritionalFacts.carbs_g.toFixed(1)}g
+                    </p>
+                  </div>
+                  <div className="rounded-[var(--radius-xl)] border border-[var(--color-neutral-100)] p-3">
+                    <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] font-semibold uppercase tracking-wider">
+                      {t("recipeDetail.nutrition.fat")}
+                    </p>
+                    <p className="text-[var(--text-lg)] font-extrabold text-[var(--color-neutral-900)]">
+                      {recipe.nutritionalFacts.fat_g.toFixed(1)}g
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

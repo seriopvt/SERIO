@@ -6,9 +6,11 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, ChefHat } from "lucide-react";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -29,7 +31,7 @@ export default function LoginPage() {
     setIsLoading(false);
 
     if (res?.error) {
-      setError("Invalid email or password. Please try again.");
+      setError(t("auth.login.errorInvalid"));
     } else {
       router.push("/home");
     }
@@ -55,19 +57,18 @@ export default function LoginPage() {
             </div>
             <div>
               <span className="text-[var(--text-md)] font-bold text-white leading-none">
-                SERIO
+                {t("common.appName")}
               </span>
             </div>
           </Link>
 
           <h2 className="text-4xl font-extrabold text-white leading-tight mb-4">
-            Welcome
+            {t("auth.login.welcomeTitle").split("\n")[0]}
             <br />
-            Back, Chef.
+            {t("auth.login.welcomeTitle").split("\n")[1]}
           </h2>
           <p className="text-[var(--text-md)] text-white/60 max-w-sm leading-relaxed">
-            Your pantry is waiting. Sign in to discover recipes tailored to what
-            you have.
+            {t("auth.login.welcomeBody")}
           </p>
         </div>
 
@@ -75,11 +76,10 @@ export default function LoginPage() {
         <div className="relative z-10">
           <div className="border-t border-white/10 pt-6">
             <p className="text-[var(--text-base)] text-white/50 italic">
-              &ldquo;The secret of Ethiopian cooking is patience, love, and the
-              right spices.&rdquo;
+              {t("auth.login.quote")}
             </p>
             <p className="text-[var(--text-xs)] text-white/30 mt-2">
-              — Traditional Proverb
+              {t("auth.login.quoteBy")}
             </p>
           </div>
         </div>
@@ -97,20 +97,20 @@ export default function LoginPage() {
               <ChefHat size={18} strokeWidth={2.5} className="text-white" />
             </div>
             <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
-              SERIO
+              {t("common.appName")}
             </span>
           </div>
 
           <h1 className="text-2xl font-extrabold text-[var(--color-neutral-900)] mb-2">
-            Sign In
+            {t("auth.login.title")}
           </h1>
           <p className="text-[var(--text-base)] text-[var(--color-neutral-500)] mb-8">
-            Don&apos;t have an account?{" "}
+            {t("auth.login.noAccount")}{" "}
             <Link
               href="/signup"
               className="text-[var(--color-brand-primary)] font-semibold hover:underline"
             >
-              Create one
+              {t("auth.login.createOne")}
             </Link>
           </p>
 
@@ -129,14 +129,14 @@ export default function LoginPage() {
             "
           >
             <GoogleIcon />
-            Continue with Google
+            {t("auth.login.google")}
           </button>
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
             <div className="flex-1 h-px bg-[var(--color-neutral-200)]" />
             <span className="text-[var(--text-xs)] text-[var(--color-neutral-400)] font-medium uppercase tracking-wider">
-              or
+              {t("common.or")}
             </span>
             <div className="flex-1 h-px bg-[var(--color-neutral-200)]" />
           </div>
@@ -156,7 +156,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-[var(--text-sm)] font-semibold text-[var(--color-neutral-700)] mb-1.5"
               >
-                Email Address
+                {t("auth.login.emailLabel")}
               </label>
               <div className="relative">
                 <Mail
@@ -168,7 +168,7 @@ export default function LoginPage() {
                   name="email"
                   type="email"
                   required
-                  placeholder="you@example.com"
+                  placeholder={t("auth.login.emailPlaceholder")}
                   className="
                     w-full pl-11 pr-4 py-3
                     bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
@@ -190,7 +190,7 @@ export default function LoginPage() {
                   htmlFor="password"
                   className="text-[var(--text-sm)] font-semibold text-[var(--color-neutral-700)]"
                 >
-                  Password
+                  {t("auth.login.passwordLabel")}
                 </label>
                 {/* <a
                   href="#"
@@ -209,7 +209,7 @@ export default function LoginPage() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   required
-                  placeholder="Enter your password"
+                  placeholder={t("auth.login.passwordPlaceholder")}
                   className="
                     w-full pl-11 pr-11 py-3
                     bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
@@ -251,7 +251,7 @@ export default function LoginPage() {
                 <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  Sign In
+                  {t("auth.login.submit")}
                   <ArrowRight size={16} />
                 </>
               )}

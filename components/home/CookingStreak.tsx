@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { Flame, Zap } from "lucide-react";
 import { Card } from "@/components/ui";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
-const DAYS_OF_WEEK = ["S", "M", "T", "W", "T", "F", "S"];
 const WEEKLY_GOAL = 7;
 
 // Returns today's day-of-week index (0 = Sun)
@@ -13,9 +13,9 @@ function todayDow() {
 }
 
 // Returns an array of the last 7 day-of-week labels ending today
-function getWeekLabels(): string[] {
+function getWeekLabels(daysOfWeek: string[]): string[] {
   const dow = todayDow();
-  return Array.from({ length: 7 }, (_, i) => DAYS_OF_WEEK[(dow - 6 + i + 7) % 7]);
+  return Array.from({ length: 7 }, (_, i) => daysOfWeek[(dow - 6 + i + 7) % 7]);
 }
 
 // Which of the last 7 slots are "active" given a streak count
@@ -25,6 +25,7 @@ function getActiveSlots(streak: number): boolean[] {
 }
 
 export default function CookingStreak() {
+  const { t } = useI18n();
   const [streak, setStreak] = useState<number | null>(null);
   const [todayActive, setTodayActive] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -42,7 +43,16 @@ export default function CookingStreak() {
       .finally(() => setLoading(false));
   }, []);
 
-  const labels = getWeekLabels();
+  const daysOfWeek = [
+    t("home.streak.dow.sun"),
+    t("home.streak.dow.mon"),
+    t("home.streak.dow.tue"),
+    t("home.streak.dow.wed"),
+    t("home.streak.dow.thu"),
+    t("home.streak.dow.fri"),
+    t("home.streak.dow.sat"),
+  ];
+  const labels = getWeekLabels(daysOfWeek);
   const activeSlots = getActiveSlots(streak ?? 0);
   const remaining = Math.max(0, WEEKLY_GOAL - (streak ?? 0));
   const pct = Math.min(100, ((streak ?? 0) / WEEKLY_GOAL) * 100);
@@ -56,13 +66,13 @@ export default function CookingStreak() {
             <Flame size={14} className="text-[var(--color-brand-primary)]" fill="currentColor" />
           </div>
           <h4 className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
-            Cooking Streak
+            {t("home.streak.title")}
           </h4>
         </div>
         {todayActive && (
           <span className="flex items-center gap-1 text-[11px] font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
             <Zap size={10} fill="currentColor" />
-            Active today
+            {t("home.streak.activeToday")}
           </span>
         )}
       </div>
@@ -85,7 +95,7 @@ export default function CookingStreak() {
               {streak}
             </span>
             <span className="text-[var(--text-sm)] text-[var(--color-neutral-600)] pb-1">
-              day{streak !== 1 ? "s" : ""} in a row
+              {t("home.streak.daysInRow", { suffix: streak !== 1 ? "s" : "" })}
             </span>
           </div>
 
@@ -142,8 +152,11 @@ export default function CookingStreak() {
 
           <p className="text-[11px] text-[var(--color-neutral-600)] mt-2">
             {remaining === 0
-              ? "🎉 Weekly goal reached! Keep it up!"
-              : `${remaining} more active day${remaining !== 1 ? "s" : ""} to reach your weekly goal`}
+              ? t("home.streak.weeklyGoalReached")
+              : t("home.streak.weeklyGoalRemaining", {
+                  remaining: String(remaining),
+                  suffix: remaining !== 1 ? "s" : "",
+                })}
           </p>
         </>
       )}

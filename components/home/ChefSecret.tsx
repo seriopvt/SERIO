@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { RefreshCw, Sparkles } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface Tip {
   id: number;
@@ -10,38 +11,23 @@ interface Tip {
 }
 
 // Fallback tips while DB is being seeded or if fetch fails
-const FALLBACK_TIPS: Tip[] = [
-  {
-    id: 0,
-    tip: "Toast your Berbere spice mix in a dry pan before adding oil — it awakens the flavors and deepens the color.",
-    author: "Traditional Kitchen",
-  },
-  {
-    id: 1,
-    tip: "Always caramelize your onions low and slow for Wot — the deeper the brown, the richer the stew.",
-    author: "Chef Yohannes",
-  },
-  {
-    id: 2,
-    tip: "Add a splash of tej (honey wine) to your Doro Wat for a subtle sweetness that balances the heat.",
-    author: "Addis Kitchen",
-  },
-  {
-    id: 3,
-    tip: "Rest your Injera batter at room temperature for 2–3 days for maximum sourness and fermentation.",
-    author: "Traditional Kitchen",
-  },
-  {
-    id: 4,
-    tip: "Niter Kibbeh is the soul of Ethiopian cooking — make a big batch and refrigerate it for up to a month.",
-    author: "Chef Tigist",
-  },
-];
+function getFallbackTips(t: (key: string, params?: Record<string, string>) => string): Tip[] {
+  return [
+    { id: 0, tip: t("home.chefSecret.tip.0"), author: t("home.chefSecret.tip.0.author") },
+    { id: 1, tip: t("home.chefSecret.tip.1"), author: t("home.chefSecret.tip.1.author") },
+    { id: 2, tip: t("home.chefSecret.tip.2"), author: t("home.chefSecret.tip.2.author") },
+    { id: 3, tip: t("home.chefSecret.tip.3"), author: t("home.chefSecret.tip.3.author") },
+    { id: 4, tip: t("home.chefSecret.tip.4"), author: t("home.chefSecret.tip.4.author") },
+  ];
+}
 
 export default function ChefSecret() {
+  const { t } = useI18n();
   const [tip, setTip] = useState<Tip | null>(null);
   const [loading, setLoading] = useState(true);
   const [localIdx, setLocalIdx] = useState(0);
+
+  const FALLBACK_TIPS = getFallbackTips(t);
 
   const fetchTip = async () => {
     try {
@@ -88,12 +74,12 @@ export default function ChefSecret() {
             <Sparkles size={12} className="text-orange-300" />
           </div>
           <p className="text-[11px] font-bold uppercase tracking-wider text-orange-300">
-            Chef&apos;s Secret
+            {t("home.chefSecret.title")}
           </p>
         </div>
         <button
           onClick={cycleTip}
-          aria-label="Next tip"
+          aria-label={t("home.chefSecret.nextTip")}
           className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer"
         >
           <RefreshCw size={11} className="text-white/70" />
@@ -116,7 +102,7 @@ export default function ChefSecret() {
       {/* Author */}
       {displayTip.author && (
         <p className="text-[11px] text-orange-300/70 font-medium relative z-10">
-          — {displayTip.author}
+          {t("home.chefSecret.tipAuthorPrefix", { author: displayTip.author })}
         </p>
       )}
     </div>

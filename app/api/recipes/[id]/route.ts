@@ -47,6 +47,10 @@ export async function GET(
 
     const source = isAm && recipe.recipeAm ? recipe.recipeAm : recipe;
     const data = source.recipeData as Record<string, unknown> | null;
+    const nutritionalFacts =
+      (source as unknown as { nutritionalFacts?: unknown }).nutritionalFacts ??
+      (data?.nutritionalFacts as unknown) ??
+      null;
 
     return NextResponse.json({
       id: recipe.id,
@@ -66,6 +70,7 @@ export async function GET(
       time: (data?.time as number) ?? null,
       steps: (data?.steps as string[]) ?? [],
       tip: (data?.tip as string) ?? null,
+      nutritionalFacts,
       isSaved,
     });
   } catch (err) {

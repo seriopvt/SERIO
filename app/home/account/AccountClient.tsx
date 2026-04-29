@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface AccountClientProps {
   user: {
@@ -33,6 +34,7 @@ interface AccountClientProps {
 
 export default function AccountClient({ user, stats, hasApiKey: initialHasKey }: AccountClientProps) {
   const router = useRouter();
+  const { t } = useI18n();
 
   // ── Delete account state ─────────────────────────────────────────────
   const [isDeleting, setIsDeleting] = useState(false);
@@ -101,7 +103,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
 
       if (!res.ok) {
         setKeyStatus("error");
-        setKeyError(data.error || "Failed to save API key.");
+        setKeyError(data.error || t("account.error.saveKeyFailed"));
         return;
       }
 
@@ -114,7 +116,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
       }, 1200);
     } catch {
       setKeyStatus("error");
-      setKeyError("Network error — please try again.");
+      setKeyError(t("account.error.network"));
     }
   };
 
@@ -137,11 +139,11 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
     try {
       setIsDeleting(true);
       const res = await fetch("/api/account", { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed to delete account");
+      if (!res.ok) throw new Error(t("account.error.deleteAccountInternal"));
       await signOut({ callbackUrl: "/" });
     } catch (error) {
       console.error(error);
-      alert("Failed to delete your account. Please try again.");
+      alert(t("account.error.deleteFailed"));
       setIsDeleting(false);
     }
   };
@@ -164,18 +166,18 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
         {/* Stats Section */}
         <section className="grid grid-cols-2 gap-4">
           <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-xl)] p-5 border border-[var(--color-neutral-100)]">
-            <p className="text-[var(--color-neutral-700)] text-sm mb-1">Saved Recipes</p>
+            <p className="text-[var(--color-neutral-700)] text-sm mb-1">{t("account.stats.saved")}</p>
             <p className="text-3xl font-bold text-[var(--color-neutral-900)]">{stats.savedRecipes}</p>
           </div>
           <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-xl)] p-5 border border-[var(--color-neutral-100)]">
-            <p className="text-[var(--color-neutral-700)] text-sm mb-1">Activity Days</p>
+            <p className="text-[var(--color-neutral-700)] text-sm mb-1">{t("account.stats.activity")}</p>
             <p className="text-3xl font-bold text-[var(--color-neutral-900)]">{stats.activities}</p>
           </div>
         </section>
 
         {/* ── API Key Section ──────────────────────────────────────────────── */}
         <section className="space-y-3">
-          <h3 className="text-lg font-bold text-[var(--color-neutral-900)]">AI Settings</h3>
+          <h3 className="text-lg font-bold text-[var(--color-neutral-900)]">{t("account.aiSettings")}</h3>
 
           <div
             className={`
@@ -203,23 +205,23 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
               {/* Text */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <p className="font-semibold text-[var(--color-neutral-900)]">Gemini API Key</p>
+                  <p className="font-semibold text-[var(--color-neutral-900)]">{t("account.apiKey.title")}</p>
                   {hasKey ? (
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 bg-emerald-100 rounded-full px-2 py-0.5">
                       <CheckCircle2 size={11} />
-                      Connected
+                      {t("account.apiKey.connected")}
                     </span>
                   ) : (
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-600 bg-amber-100 rounded-full px-2 py-0.5">
                       <XCircle size={11} />
-                      Not set
+                      {t("account.apiKey.notSet")}
                     </span>
                   )}
                 </div>
                 <p className="text-sm text-[var(--color-neutral-700)] leading-relaxed">
                   {hasKey
-                    ? "Your API key is securely stored and encrypted. AI recipe generation is ready to go."
-                    : "Add your personal Gemini API key to unlock AI recipe generation. Your key is encrypted and never shared."}
+                    ? t("account.apiKey.descSet")
+                    : t("account.apiKey.descUnset")}
                 </p>
                 {!hasKey && (
                   <a
@@ -228,7 +230,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1 text-xs text-[var(--color-brand-primary)] hover:underline mt-1.5"
                   >
-                    Get a free Gemini API key
+                    {t("account.apiKey.getFree")}
                     <ExternalLink size={11} />
                   </a>
                 )}
@@ -242,7 +244,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                     disabled={isRemovingKey}
                     className="text-xs text-[var(--color-neutral-500)] hover:text-[var(--color-error)] transition-colors px-2 py-1.5 rounded-lg hover:bg-[var(--color-error)]/5 disabled:opacity-50"
                   >
-                    {isRemovingKey ? "Removing…" : "Remove"}
+                    {isRemovingKey ? t("common.removing") : t("common.remove")}
                   </button>
                 )}
                 <button
@@ -255,7 +257,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                     }
                   `}
                 >
-                  {hasKey ? "Update Key" : "Add Key"}
+                  {hasKey ? t("account.apiKey.update") : t("account.apiKey.add")}
                 </button>
               </div>
             </div>
@@ -264,7 +266,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
 
         {/* Account Actions */}
         <section className="space-y-4">
-          <h3 className="text-lg font-bold text-[var(--color-neutral-900)]">Account Actions</h3>
+          <h3 className="text-lg font-bold text-[var(--color-neutral-900)]">{t("account.actions.title")}</h3>
 
           <div className="bg-[var(--color-surface-card)] rounded-[var(--radius-xl)] border border-[var(--color-neutral-100)] overflow-hidden">
             <button
@@ -276,9 +278,9 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                   <LogOut size={20} />
                 </div>
                 <div>
-                  <p className="font-semibold text-[var(--color-neutral-900)]">Log Out</p>
+                  <p className="font-semibold text-[var(--color-neutral-900)]">{t("account.actions.logoutTitle")}</p>
                   <p className="text-sm text-[var(--color-neutral-700)]">
-                    Sign out of your account on this device
+                    {t("account.actions.logoutDesc")}
                   </p>
                 </div>
               </div>
@@ -290,16 +292,15 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
         <section className="space-y-4 pt-4 border-t border-[var(--color-neutral-100)]">
           <h3 className="text-lg font-bold text-[var(--color-error)] flex items-center gap-2">
             <ShieldAlert size={20} />
-            Danger Zone
+            {t("account.danger.title")}
           </h3>
 
           <div className="bg-[var(--color-error)]/5 rounded-[var(--radius-xl)] border border-[var(--color-error)]/20 p-4">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="font-semibold text-[var(--color-error)]">Delete Account</p>
+                <p className="font-semibold text-[var(--color-error)]">{t("account.danger.deleteTitle")}</p>
                 <p className="text-sm text-[var(--color-neutral-700)] mt-1">
-                  Permanently delete your account and all associated data, including saved recipes
-                  and history. This action cannot be undone.
+                  {t("account.danger.deleteDesc")}
                 </p>
               </div>
 
@@ -308,7 +309,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                   onClick={() => setShowDeleteConfirm(true)}
                   className="flex-shrink-0 px-4 py-2 bg-[var(--color-error)]/10 text-[var(--color-error)] font-semibold rounded-lg hover:bg-[var(--color-error)]/20 transition-colors"
                 >
-                  Delete
+                  {t("common.delete")}
                 </button>
               ) : (
                 <div className="flex-shrink-0 flex items-center gap-2">
@@ -317,14 +318,14 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                     autoFocus
                     className="px-4 py-2 bg-[var(--color-surface-card)] text-[var(--color-neutral-700)] font-semibold rounded-lg border border-[var(--color-neutral-200)] hover:bg-[var(--color-neutral-50)] transition-colors"
                   >
-                    Cancel
+                    {t("common.cancel")}
                   </button>
                   <button
                     onClick={handleDeleteAccount}
                     disabled={isDeleting}
                     className="flex items-center gap-2 px-4 py-2 bg-[var(--color-error)] text-white font-semibold rounded-lg hover:opacity-90 transition-colors disabled:opacity-50"
                   >
-                    {isDeleting ? "Deleting..." : "Confirm"}
+                    {isDeleting ? t("common.deleting") : t("common.confirm")}
                   </button>
                 </div>
               )}
@@ -370,33 +371,33 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
               </div>
               <div>
                 <h2 className="text-lg font-bold text-[var(--color-neutral-900)]">
-                  {hasKey ? "Update Gemini API Key" : "Add Your Gemini API Key"}
+                  {hasKey ? t("account.modal.updateTitle") : t("account.modal.addTitle")}
                 </h2>
                 <p className="text-xs text-[var(--color-neutral-500)]">
-                  Encrypted and stored securely — never exposed
+                  {t("account.modal.encrypted")}
                 </p>
               </div>
             </div>
 
             {/* Info callout */}
             <div className="bg-[var(--color-brand-primary-light)] rounded-[var(--radius-lg)] p-3.5 mb-5 text-sm text-[var(--color-brand-primary)] leading-relaxed">
-              <strong>Where to get a key?</strong>{" "}
-              Visit{" "}
+              <strong>{t("account.modal.whereTitle")}</strong>{" "}
+              {t("account.modal.whereBodyA")}{" "}
               <a
                 href="https://aistudio.google.com/app/apikey"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline font-semibold hover:opacity-80"
               >
-                Google AI Studio
+                {t("account.modal.whereBodyB")}
               </a>{" "}
-              — it's free. Create a project and copy your API key.
+              {t("account.modal.whereBodyC")}
             </div>
 
             {/* Input */}
             <div className="mb-4">
               <label className="block text-sm font-semibold text-[var(--color-neutral-700)] mb-1.5">
-                API Key
+                {t("account.modal.inputLabel")}
               </label>
               <div className="relative">
                 <input
@@ -411,7 +412,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && apiKeyInput.trim()) handleSaveKey();
                   }}
-                  placeholder="AIzaSy..."
+                  placeholder={t("account.modal.inputPlaceholder")}
                   className="
                     w-full px-4 py-3 pr-11
                     bg-[var(--color-neutral-50)]
@@ -444,7 +445,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
               {keyStatus === "success" && (
                 <p className="mt-2 text-sm text-emerald-600 flex items-center gap-1.5">
                   <CheckCircle2 size={14} />
-                  API key saved successfully!
+                  {t("account.modal.success")}
                 </p>
               )}
             </div>
@@ -455,7 +456,7 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                 onClick={() => setShowKeyModal(false)}
                 className="flex-1 px-4 py-2.5 rounded-[var(--radius-lg)] border border-[var(--color-neutral-200)] text-[var(--color-neutral-700)] font-semibold text-sm hover:bg-[var(--color-neutral-50)] transition-colors"
               >
-                Cancel
+                {t("common.cancel")}
               </button>
               <button
                 onClick={handleSaveKey}
@@ -473,15 +474,15 @@ export default function AccountClient({ user, stats, hasApiKey: initialHasKey }:
                 {keyStatus === "saving" ? (
                   <>
                     <Loader2 size={15} className="animate-spin" />
-                    Saving…
+                    {t("common.saving")}
                   </>
                 ) : keyStatus === "success" ? (
                   <>
                     <CheckCircle2 size={15} />
-                    Saved!
+                    {t("common.saved")}
                   </>
                 ) : (
-                  "Save Key"
+                  t("account.modal.saveKey")
                 )}
               </button>
             </div>

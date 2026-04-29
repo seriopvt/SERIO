@@ -1,4 +1,7 @@
+ "use client";
+
 import React from "react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface StepCardProps {
   step: string;
@@ -31,33 +34,34 @@ function StepCard({ step, title, description }: StepCardProps) {
 }
 
 export default function HowItWorksSection() {
+  const { t } = useI18n();
   return (
     <section id="how-it-works" className="py-20 px-6 bg-white">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <p className="text-[var(--text-sm)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider mb-2">
-            How It Works
+            {t("landing.how.kicker")}
           </p>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--color-neutral-900)] mb-4">
-            Three Steps to Authentic Flavor
+            {t("landing.how.title")}
           </h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
           <StepCard
             step="01"
-            title="Enter Your Ingredients"
-            description="Type in or scan what's in your kitchen — teff, berbere, lentils, whatever you have."
+            title={t("landing.how.step1")}
+            description={t("landing.how.step1Desc")}
           />
           <StepCard
             step="02"
-            title="Get Recipes Instantly"
-            description="Our AI matches your ingredients to traditional Ethiopian dishes and generates personalized recipes."
+            title={t("landing.how.step2Alt")}
+            description={t("landing.how.step2AltDesc")}
           />
           <StepCard
             step="03"
-            title="Cook & Enjoy"
-            description="Follow step-by-step instructions with chef's tips to create authentic Ethiopian meals."
+            title={t("landing.how.step3Alt")}
+            description={t("landing.how.step3AltDesc")}
           />
         </div>
       </div>

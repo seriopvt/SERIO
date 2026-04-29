@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { RefreshCw, Clock, Flame, Leaf, UtensilsCrossed } from "lucide-react";
 import { Card } from "@/components/ui";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface QuickRec {
   id: number;
@@ -31,6 +32,7 @@ const GRADIENTS = [
 ];
 
 function RecItem({ rec }: { rec: QuickRec }) {
+  const { t } = useI18n();
   const spiceColor = SPICE_COLORS[rec.spiceLevel ?? "medium"] ?? SPICE_COLORS.medium;
   const motif = MOTIFS[rec.id % MOTIFS.length];
   const [g1, g2] = GRADIENTS[rec.id % GRADIENTS.length];
@@ -62,13 +64,13 @@ function RecItem({ rec }: { rec: QuickRec }) {
           {rec.time && (
             <span className="flex items-center gap-0.5 text-[11px] text-[var(--color-neutral-400)]">
               <Clock size={10} />
-              {rec.time}m
+              {t("home.quickRecs.timeMinutesShort", { minutes: String(rec.time) })}
             </span>
           )}
           {rec.isVegan && (
             <span className="flex items-center gap-0.5 text-[11px] text-green-500 font-medium">
               <Leaf size={10} fill="currentColor" />
-              Vegan
+              {t("home.quickRecs.vegan")}
             </span>
           )}
           <span
@@ -84,6 +86,7 @@ function RecItem({ rec }: { rec: QuickRec }) {
 }
 
 export default function QuickRecs() {
+  const { t } = useI18n();
   const [recs, setRecs] = useState<QuickRec[]>([]);
   const [loading, setLoading] = useState(true);
   const [spinning, setSpinning] = useState(false);
@@ -110,14 +113,14 @@ export default function QuickRecs() {
         <div className="flex items-center gap-2">
           <UtensilsCrossed size={15} className="text-[var(--color-brand-primary)]" />
           <h4 className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
-            Quick Recs
+            {t("home.quickRecs.title")}
           </h4>
         </div>
         <button
           onClick={fetchRecs}
           disabled={spinning}
           className="text-[var(--color-brand-primary)] hover:opacity-70 transition-opacity cursor-pointer disabled:opacity-40"
-          aria-label="Refresh suggestions"
+          aria-label={t("home.quickRecs.refresh")}
         >
           <RefreshCw
             size={14}
@@ -140,7 +143,7 @@ export default function QuickRecs() {
         </div>
       ) : recs.length === 0 ? (
         <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] text-center py-4">
-          No recipes found
+          {t("home.quickRecs.empty")}
         </p>
       ) : (
         <div className="space-y-0.5">
@@ -152,7 +155,7 @@ export default function QuickRecs() {
         href="/home/recipes"
         className="block w-full text-center text-[var(--text-sm)] font-semibold text-[var(--color-neutral-500)] mt-3 pt-3 border-t border-[var(--color-neutral-100)] hover:text-[var(--color-brand-primary)] transition-colors"
       >
-        Browse all recipes →
+        {t("home.quickRecs.browseAll")}
       </Link>
     </Card>
   );

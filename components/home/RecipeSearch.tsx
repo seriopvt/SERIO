@@ -11,6 +11,7 @@ import {
   UtensilsCrossed,
 } from "lucide-react";
 import { Card } from "@/components/ui";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 // ── Types ─────────────────────────────────────────────────────────────
 
@@ -30,22 +31,23 @@ interface SearchResult {
 
 // ── Spice Level Config ─────────────────────────────────────────────────
 
-const SPICE_CONFIG: Record<string, { label: string; color: string }> = {
-  mild:        { label: "Mild",       color: "var(--color-accent-green)"  },
-  medium:      { label: "Medium",     color: "var(--color-accent-amber)"  },
-  hot:         { label: "Hot",        color: "var(--color-accent-orange)" },
-  "extra-hot": { label: "Extra Hot",  color: "var(--color-accent-red)"    },
+const SPICE_CONFIG: Record<string, { labelKey: string; color: string }> = {
+  mild:        { labelKey: "recipes.spice.mild",     color: "var(--color-accent-green)"  },
+  medium:      { labelKey: "recipes.spice.medium",   color: "var(--color-accent-amber)"  },
+  hot:         { labelKey: "recipes.spice.hot",      color: "var(--color-accent-orange)" },
+  "extra-hot": { labelKey: "recipes.spice.extraHot", color: "var(--color-accent-red)"    },
 };
 
-const TABS: { id: SearchType; label: string }[] = [
-  { id: "all",        label: "All"        },
-  { id: "title",      label: "By Title"   },
-  { id: "ingredient", label: "By Ingredient" },
+const TABS: { id: SearchType; labelKey: string }[] = [
+  { id: "all",        labelKey: "home.recipeSearch.tab.all" },
+  { id: "title",      labelKey: "home.recipeSearch.tab.title" },
+  { id: "ingredient", labelKey: "home.recipeSearch.tab.ingredient" },
 ];
 
 // ── Main Component ─────────────────────────────────────────────────────
 
 export default function RecipeSearch() {
+  const { t } = useI18n();
   const [query, setQuery]       = useState("");
   const [type, setType]         = useState<SearchType>("all");
   const [results, setResults]   = useState<SearchResult[]>([]);
@@ -77,14 +79,14 @@ export default function RecipeSearch() {
 
         if (!res.ok) {
           const data = await res.json();
-          throw new Error(data.error ?? "Search failed");
+          throw new Error(data.error ?? t("home.recipeSearch.error.searchFailed"));
         }
 
         const data = await res.json();
         setResults(data.results ?? []);
         setHasSearched(true);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Something went wrong");
+        setError(err instanceof Error ? err.message : t("home.recipeSearch.error.generic"));
         setResults([]);
         setHasSearched(true);
       } finally {
@@ -103,11 +105,11 @@ export default function RecipeSearch() {
       <div className="flex items-center gap-2 mb-1">
         <Search size={16} className="text-[var(--color-brand-primary)]" />
         <h3 className="text-[var(--text-xl)] font-bold text-[var(--color-neutral-900)]">
-          Recipe Search
+          {t("home.recipeSearch.title")}
         </h3>
       </div>
       <p className="text-[var(--text-base)] text-[var(--color-neutral-400)] mb-5">
-        Find a saved recipe instantly.
+        {t("home.recipeSearch.subtitle")}
       </p>
 
       {/* ── Search Input ── */}
@@ -137,10 +139,10 @@ export default function RecipeSearch() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder={
             type === "ingredient"
-              ? "e.g. berbere, teff, lentils…"
+              ? t("home.recipeSearch.placeholder.ingredient")
               : type === "title"
-              ? "e.g. Doro Wat, Injera…"
-              : "Search by title or ingredient…"
+              ? t("home.recipeSearch.placeholder.title")
+              : t("home.recipeSearch.placeholder.all")
           }
           className="
             flex-1 bg-transparent
@@ -169,7 +171,7 @@ export default function RecipeSearch() {
               }
             `}
           >
-            {tab.label}
+            {t(tab.labelKey)}
           </button>
         ))}
       </div>
@@ -188,10 +190,10 @@ export default function RecipeSearch() {
             className="text-[var(--color-neutral-300)]"
           />
           <p className="text-[var(--text-base)] font-semibold text-[var(--color-neutral-500)]">
-            No recipes found
+            {t("home.recipeSearch.empty.title")}
           </p>
           <p className="text-[var(--text-sm)] text-[var(--color-neutral-400)]">
-            Try a different term, or generate a new recipe with AI below.
+            {t("home.recipeSearch.empty.subtitle")}
           </p>
         </div>
       )}
@@ -227,6 +229,7 @@ export default function RecipeSearch() {
 // ── Result Item ────────────────────────────────────────────────────────
 
 function SearchResultItem({ recipe }: { recipe: SearchResult }) {
+  const { t } = useI18n();
   const spice = SPICE_CONFIG[recipe.spiceLevel] ?? SPICE_CONFIG.medium;
   const totalTime =
     recipe.prepTime && recipe.cookTime
@@ -288,12 +291,12 @@ function SearchResultItem({ recipe }: { recipe: SearchResult }) {
           }}
         >
           <Flame size={10} />
-          {spice.label}
+          {t(spice.labelKey)}
         </span>
         {recipe.isVegan && (
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-50 text-[var(--color-accent-green)] text-[var(--text-xs)] font-semibold">
             <Leaf size={10} />
-            Vegan
+            {t("recipes.card.vegan")}
           </span>
         )}
       </div>

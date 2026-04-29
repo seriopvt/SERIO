@@ -8,22 +8,13 @@ import Link from "next/link";
 import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface HeaderProps {
-  // raw server props, but we'll override if needed or just parse them
-  greeting: string;
-  subtitle: string;
+  timeOfDay: "Morning" | "Afternoon" | "Evening";
+  name: string;
   hasApiKey?: boolean;
 }
 
-export default function Header({ greeting, subtitle, hasApiKey }: HeaderProps) {
+export default function Header({ timeOfDay, name, hasApiKey }: HeaderProps) {
   const { t, locale, setLocale } = useI18n();
-
-  // We can try to extract parts from greeting or just rely entirely on translation
-  // The layout passes "Good {timeOfDay}, {firstName}!". We can parse the name out.
-  const timeMatch = greeting.match(/Good (Morning|Afternoon|Evening)/);
-  const nameMatch = greeting.match(/, (.*?)(!|$)/);
-  
-  const timeOfDay = timeMatch ? timeMatch[1] : "Morning";
-  const firstName = nameMatch ? nameMatch[1] : "Chef";
 
   return (
     <header
@@ -58,7 +49,7 @@ export default function Header({ greeting, subtitle, hasApiKey }: HeaderProps) {
 
       <div>
         <h2 className="text-[var(--text-xl)] font-bold text-[var(--color-neutral-900)]">
-          {t("header.greeting", { timeOfDay, name: firstName })}
+          {t("header.greeting", { timeOfDay, name })}
         </h2>
         <p className="text-[var(--text-base)] text-[var(--color-brand-primary)]">
           {t("header.subtitle")}

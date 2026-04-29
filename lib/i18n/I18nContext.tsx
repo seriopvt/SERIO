@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { Locale, getTranslation } from "./translations";
 import { useRouter } from "next/navigation";
+import { startTransition } from "react";
 
 interface I18nContextType {
   locale: Locale;
@@ -28,7 +29,9 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     setLocaleState(loc);
     document.cookie = `NEXT_LOCALE=${loc}; path=/; max-age=31536000`;
     // Force a router refresh so server components / API handlers re-fetch with new cookie
-    router.refresh();
+    startTransition(() => {
+      router.refresh();
+    });
   }, [router]);
 
   const t = useCallback((key: string, params?: Record<string, string>) => {

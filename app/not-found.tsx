@@ -1,7 +1,14 @@
 import Link from "next/link";
 import { Home, ChefHat, UtensilsCrossed } from "lucide-react";
+import { cookies } from "next/headers";
+import { getTranslation, Locale } from "@/lib/i18n/translations";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const locale: Locale = cookieLocale === "am" || cookieLocale === "en" ? (cookieLocale as Locale) : "en";
+  const t = (key: string, params?: Record<string, string>) => getTranslation(locale, key, params);
+
   return (
     <div
       className="
@@ -66,7 +73,7 @@ export default function NotFound() {
             mb-3
           "
         >
-          Recipe not found
+          {t("notFound.title")}
         </h1>
 
         {/* Subtext */}
@@ -78,8 +85,7 @@ export default function NotFound() {
             mb-8
           "
         >
-          Looks like this page wandered off the menu. Let&apos;s get you back
-          to the kitchen.
+          {t("notFound.subtitle")}
         </p>
 
         {/* CTA */}
@@ -98,7 +104,7 @@ export default function NotFound() {
           "
         >
           <Home size={16} />
-          Back to Dashboard
+          {t("notFound.cta")}
         </Link>
 
         {/* Decorative dots */}

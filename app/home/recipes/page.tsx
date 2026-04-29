@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import RecipeCatalogCard, { RecipeCatalogCardProps } from "@/components/recipes/RecipeCatalogCard";
 import FilterBar from "@/components/recipes/FilterBar";
 import { BookOpen, ChevronLeft, ChevronRight } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 const SKELETON_GRADIENTS = [
   ["rgba(249, 115, 22, 0.1)", "rgba(245, 158, 11, 0.1)"],
@@ -33,6 +34,7 @@ function RecipeGrid() {
   const q = searchParams.get("q") ?? "";
   const difficulty = searchParams.get("difficulty") ?? "";
   const page = parseInt(searchParams.get("page") ?? "1", 10);
+  const { locale, t } = useI18n();
 
   const [data, setData] = React.useState<{ results: PaginatedRecipe[]; pagination: Pagination } | null>(null);
   const [loading, setLoading] = React.useState(true);
@@ -50,9 +52,9 @@ function RecipeGrid() {
     fetch(`/api/recipes?${params.toString()}`)
       .then((r) => r.json())
       .then((d) => setData(d))
-      .catch(() => setError("Failed to load recipes"))
+      .catch(() => setError(t("recipes.error.loadFailed")))
       .finally(() => setLoading(false));
-  }, [q, difficulty, page]);
+  }, [q, difficulty, page, locale]);
 
   const handleSave = useCallback(async (id: number) => {
     setLoadingIds((s) => new Set(s).add(id));
@@ -122,9 +124,9 @@ function RecipeGrid() {
         <div className="w-14 h-14 rounded-full bg-[var(--color-neutral-100)] flex items-center justify-center mx-auto mb-4">
           <BookOpen size={24} className="text-[var(--color-neutral-400)]" />
         </div>
-        <h3 className="font-bold text-[var(--text-md)] text-[var(--color-neutral-700)] mb-2">No recipes found</h3>
+        <h3 className="font-bold text-[var(--text-md)] text-[var(--color-neutral-700)] mb-2">{t("recipes.noneTitle")}</h3>
         <p className="text-[var(--text-base)] text-[var(--color-neutral-400)]">
-          Try adjusting your search or filters.
+          {t("recipes.noneSubtitle")}
         </p>
       </div>
     );
@@ -133,7 +135,10 @@ function RecipeGrid() {
   return (
     <>
       <p className="text-[var(--text-sm)] text-[var(--color-neutral-400)] mb-4">
-        {data.pagination.total} recipe{data.pagination.total !== 1 ? "s" : ""} found
+        {t("recipes.found", {
+          count: String(data.pagination.total),
+          suffix: data.pagination.total !== 1 ? "s" : "",
+        })}
       </p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {data.results.map((recipe) => (
@@ -165,7 +170,7 @@ function RecipeGrid() {
             <ChevronLeft size={16} />
           </a>
           <span className="text-[var(--text-sm)] text-[var(--color-neutral-500)]">
-            Page {page} of {data.pagination.totalPages}
+            {t("recipes.page", { page: String(page), totalPages: String(data.pagination.totalPages) })}
           </span>
           <a
             href={`?${new URLSearchParams({ ...(q && { q }), ...(difficulty && { difficulty }), page: String(Math.min(data.pagination.totalPages, page + 1)) }).toString()}`}
@@ -187,15 +192,16 @@ function RecipeGrid() {
 }
 
 export default function RecipesCatalogPage() {
+  const { t } = useI18n();
   return (
     <div>
       {/* Page header */}
       <div className="mb-8">
         <h1 className="text-[var(--text-3xl)] font-extrabold text-[var(--color-neutral-900)] leading-tight mb-1">
-          Recipe Catalog
+          {t("recipes.title")}
         </h1>
         <p className="text-[var(--text-base)] text-[var(--color-neutral-500)]">
-          Browse all Ethiopian recipes — filter by difficulty or search by name and ingredient.
+          {t("recipes.subtitle")}
         </p>
       </div>
 

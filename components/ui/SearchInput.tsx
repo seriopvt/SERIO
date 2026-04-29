@@ -1,5 +1,6 @@
 import React from "react";
 import { Search } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface SearchInputProps {
   placeholder?: string;
@@ -9,11 +10,14 @@ interface SearchInputProps {
 }
 
 export default function SearchInput({
-  placeholder = "Search...",
+  placeholder,
   value,
   onChange,
   className = "",
 }: SearchInputProps) {
+  const { t } = useI18n();
+  const resolvedPlaceholder = placeholder ?? t("ui.search.placeholder");
+
   return (
     <div
       className={`
@@ -32,7 +36,7 @@ export default function SearchInput({
         type="text"
         value={value}
         onChange={onChange}
-        placeholder={placeholder}
+        placeholder={resolvedPlaceholder}
         className="
           bg-transparent flex-1 pl-7
           text-[var(--text-base)] text-[var(--color-neutral-600)]

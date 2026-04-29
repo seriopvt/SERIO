@@ -1,5 +1,8 @@
+ "use client";
+
 import React from "react";
 import { Sparkles, ScanLine, BookOpen, ChefHat } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface FeatureCardProps {
   icon: React.ReactNode;
@@ -43,41 +46,42 @@ function FeatureCard({ icon, title, description }: FeatureCardProps) {
 }
 
 export default function FeaturesSection() {
+  const { t } = useI18n();
   return (
     <section id="features" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <p className="text-[var(--text-sm)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider mb-2">
-            Features
+            {t("landing.features.kicker")}
           </p>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--color-neutral-900)] mb-4">
-            Everything You Need to Cook Ethiopian
+            {t("landing.features.title")}
           </h2>
           <p className="text-[var(--text-md)] text-[var(--color-neutral-500)] max-w-lg mx-auto">
-            From pantry scanning to recipe generation — Serio has it all.
+            {t("landing.features.subtitle")}
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <FeatureCard
             icon={<Sparkles size={24} />}
-            title="AI Recipe Generator"
-            description="Enter your ingredients and get authentic Ethiopian recipes generated instantly."
+            title={t("landing.feature.aiTitle")}
+            description={t("landing.feature.aiDesc")}
           />
           <FeatureCard
             icon={<ScanLine size={24} />}
-            title="Pantry Scanner"
-            description="Scan your pantry with your camera and we'll identify ingredients automatically."
+            title={t("landing.feature.scanTitle")}
+            description={t("landing.feature.scanDesc")}
           />
           <FeatureCard
             icon={<BookOpen size={24} />}
-            title="Digital Cookbook"
-            description="Save, organize, and revisit your favorite recipes in your personal cookbook."
+            title={t("landing.feature.cookbookTitle")}
+            description={t("landing.feature.cookbookDesc")}
           />
           <FeatureCard
             icon={<ChefHat size={24} />}
-            title="Chef's Tips"
-            description="Learn traditional cooking secrets from Ethiopian culinary masters."
+            title={t("landing.feature.tipsTitle")}
+            description={t("landing.feature.tipsDesc")}
           />
         </div>
       </div>

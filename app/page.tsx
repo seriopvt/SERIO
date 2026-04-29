@@ -1,5 +1,7 @@
 import Link from "next/link";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import { cookies } from "next/headers";
+import { getTranslation, Locale } from "@/lib/i18n/translations";
 import {
   ChefHat,
   Sparkles,
@@ -10,7 +12,12 @@ import {
   Flame,
 } from "lucide-react";
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const locale: Locale = cookieLocale === "am" || cookieLocale === "en" ? (cookieLocale as Locale) : "en";
+  const t = (key: string, params?: Record<string, string>) => getTranslation(locale, key, params);
+
   return (
     <div className="min-h-screen bg-[var(--color-surface-page)] font-[var(--font-family-sans)]">
       {/* ===== NAVBAR ===== */}
@@ -23,10 +30,10 @@ export default function LandingPage() {
             </div>
             <div>
               <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)] leading-none">
-                SERIO
+                {t("common.appName")}
               </span>
               <span className="text-[10px] text-[var(--color-neutral-600)] tracking-wider uppercase ml-1.5">
-                Ethiopian Kitchen
+                {t("common.appTagline")}
               </span>
             </div>
           </Link>
@@ -37,19 +44,19 @@ export default function LandingPage() {
               href="#features"
               className="text-[var(--text-base)] text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-900)] transition-colors"
             >
-              Features
+              {t("landing.nav.features")}
             </a>
             <a
               href="#how-it-works"
               className="text-[var(--text-base)] text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-900)] transition-colors"
             >
-              How It Works
+              {t("landing.nav.howItWorks")}
             </a>
             <a
               href="#testimonials"
               className="text-[var(--text-base)] text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-900)] transition-colors"
             >
-              Testimonials
+              {t("landing.nav.testimonials")}
             </a>
           </div>
 
@@ -59,7 +66,7 @@ export default function LandingPage() {
               href="/login"
               className="text-[var(--text-base)] font-semibold text-[var(--color-neutral-600)] hover:text-[var(--color-neutral-900)] transition-colors px-4 py-2"
             >
-              Log In
+              {t("landing.nav.login")}
             </Link>
             <ThemeToggle />
             <Link
@@ -73,7 +80,7 @@ export default function LandingPage() {
                 transition-colors shadow-[var(--shadow-brand)]
               "
             >
-              Get Started
+              {t("landing.nav.getStarted")}
               <ArrowRight size={16} />
             </Link>
           </div>
@@ -86,18 +93,17 @@ export default function LandingPage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] rounded-full px-4 py-1.5 text-[var(--text-sm)] font-semibold mb-6">
             <Flame size={14} />
-            Powered by Ethiopian Culinary Tradition
+            {t("landing.badge.poweredBy")}
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold text-[var(--color-neutral-900)] leading-tight mb-6 max-w-3xl mx-auto">
-            Cook Authentic Ethiopian
-            <span className="text-[var(--color-brand-primary)]"> Recipes</span>{" "}
-            from Your Pantry
+            {t("landing.hero.titleA")}
+            <span className="text-[var(--color-brand-primary)]"> {t("landing.hero.titleB")}</span>{" "}
+            {t("landing.hero.titleC")}
           </h1>
 
           <p className="text-[var(--text-lg)] text-[var(--color-neutral-500)] max-w-xl mx-auto mb-10 leading-relaxed">
-            Enter what you have, and Serio instantly generates traditional
-            Ethiopian recipes — personalized, authentic, and ready to cook.
+            {t("landing.hero.subtitle")}
           </p>
 
           {/* CTA Buttons */}
@@ -114,7 +120,7 @@ export default function LandingPage() {
                 hover:shadow-lg
               "
             >
-              Start Cooking Free
+              {t("landing.cta.startFree")}
               <ArrowRight size={18} />
             </Link>
             <a
@@ -129,7 +135,7 @@ export default function LandingPage() {
                 transition-all hover:shadow-[var(--shadow-sm)]
               "
             >
-              See How It Works
+              {t("landing.cta.seeHow")}
             </a>
           </div>
 
@@ -140,20 +146,20 @@ export default function LandingPage() {
               <div className="flex items-center gap-3 mb-6">
                 <div className="flex-1 flex items-center bg-[var(--color-neutral-50)] rounded-full px-5 py-3.5 border border-[var(--color-neutral-100)]">
                   <span className="text-[var(--color-neutral-500)] text-[var(--text-base)]">
-                    e.g. teff flour, berbere, garlic, onions...
+                    {t("landing.mock.placeholder")}
                   </span>
                 </div>
                 <div className="bg-[var(--color-brand-primary)] text-white px-6 py-3.5 rounded-full text-[var(--text-base)] font-semibold">
-                  Inspire Me
+                  {t("landing.mock.inspire")}
                 </div>
               </div>
 
               {/* Mock recipe cards */}
               <div className="grid grid-cols-3 gap-4">
                 {[
-                  { name: "Doro Wat", time: "2h", rating: "4.8" },
-                  { name: "Teff Injera", time: "24h", rating: "4.7" },
-                  { name: "Misir Wot", time: "45m", rating: "4.8" },
+                  { name: t("landing.mock.card1.name"), time: t("landing.mock.card1.time"), rating: t("landing.mock.card1.rating") },
+                  { name: t("landing.mock.card2.name"), time: t("landing.mock.card2.time"), rating: t("landing.mock.card2.rating") },
+                  { name: t("landing.mock.card3.name"), time: t("landing.mock.card3.time"), rating: t("landing.mock.card3.rating") },
                 ].map((recipe) => (
                   <div
                     key={recipe.name}
@@ -185,36 +191,36 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-[var(--text-sm)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider mb-2">
-              Features
+              {t("landing.features.kicker")}
             </p>
             <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--color-neutral-900)] mb-4">
-              Everything You Need to Cook Ethiopian
+              {t("landing.features.title")}
             </h2>
             <p className="text-[var(--text-md)] text-[var(--color-neutral-500)] max-w-lg mx-auto">
-              From pantry scanning to recipe generation — Serio has it all.
+              {t("landing.features.subtitle")}
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FeatureCard
               icon={<Sparkles size={24} />}
-              title="AI Recipe Generator"
-              description="Enter your ingredients and get authentic Ethiopian recipes generated instantly."
+              title={t("landing.feature.aiTitle")}
+              description={t("landing.feature.aiDesc")}
             />
             <FeatureCard
               icon={<ScanLine size={24} />}
-              title="Pantry Scanner"
-              description="Scan your pantry with your camera and we'll identify ingredients automatically."
+              title={t("landing.feature.scanTitle")}
+              description={t("landing.feature.scanDesc")}
             />
             <FeatureCard
               icon={<BookOpen size={24} />}
-              title="Digital Cookbook"
-              description="Save, organize, and revisit your favorite recipes in your personal cookbook."
+              title={t("landing.feature.cookbookTitle")}
+              description={t("landing.feature.cookbookDesc")}
             />
             <FeatureCard
               icon={<ChefHat size={24} />}
-              title="Chef's Tips"
-              description="Learn traditional cooking secrets from Ethiopian culinary masters."
+              title={t("landing.feature.tipsTitle")}
+              description={t("landing.feature.tipsDesc")}
             />
           </div>
         </div>
@@ -225,28 +231,28 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-[var(--text-sm)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider mb-2">
-              How It Works
+              {t("landing.how.kicker")}
             </p>
             <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--color-neutral-900)] mb-4">
-              Three Steps to Authentic Flavor
+              {t("landing.how.title")}
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             <StepCard
               step="01"
-              title="Enter Your Ingredients"
-              description="Type in or scan what's in your kitchen — teff, berbere, lentils, whatever you have."
+              title={t("landing.how.step1")}
+              description={t("landing.how.step1Desc")}
             />
             <StepCard
               step="02"
-              title="Get Recipes Instantly"
-              description="Our AI matches your ingredients to traditional Ethiopian dishes and generates personalized recipes."
+              title={t("landing.how.step2Alt")}
+              description={t("landing.how.step2AltDesc")}
             />
             <StepCard
               step="03"
-              title="Cook & Enjoy"
-              description="Follow step-by-step instructions with chef's tips to create authentic Ethiopian meals."
+              title={t("landing.how.step3Alt")}
+              description={t("landing.how.step3AltDesc")}
             />
           </div>
         </div>
@@ -257,28 +263,28 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-[var(--text-sm)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider mb-2">
-              Testimonials
+              {t("landing.testimonials.kicker")}
             </p>
             <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--color-neutral-900)] mb-4">
-              Loved by Home Cooks
+              {t("landing.testimonials.title")}
             </h2>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             <TestimonialCard
-              quote="Serio helped me reconnect with my grandmother's recipes. The AI suggestions are incredibly accurate!"
-              name="Meron K."
-              role="Home Cook"
+              quote={t("landing.testimonial.1.quote")}
+              name={t("landing.testimonial.1.name")}
+              role={t("landing.testimonial.1.role")}
             />
             <TestimonialCard
-              quote="I never knew I could make Doro Wat with what I already had in my pantry. This app is a game changer."
-              name="Daniel A."
-              role="Food Enthusiast"
+              quote={t("landing.testimonial.2.quote")}
+              name={t("landing.testimonial.2.name")}
+              role={t("landing.testimonial.2.role")}
             />
             <TestimonialCard
-              quote="The chef's tips alone are worth it. I've learned techniques I couldn't find anywhere else online."
-              name="Sara T."
-              role="Pro Member"
+              quote={t("landing.testimonial.3.quote")}
+              name={t("landing.testimonial.3.name")}
+              role={t("landing.testimonial.3.role")}
             />
           </div>
         </div>
@@ -290,11 +296,10 @@ export default function LandingPage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(232,101,44,0.15),transparent_60%)]" />
           <div className="relative z-10">
             <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-              Ready to Start Cooking?
+              {t("landing.cta.title")}
             </h2>
             <p className="text-[var(--text-md)] text-white/70 mb-8 max-w-md mx-auto">
-              Join thousands of home cooks discovering authentic Ethiopian
-              recipes every day.
+              {t("landing.cta.subtitle")}
             </p>
             <Link
               href="/signup"
@@ -308,7 +313,7 @@ export default function LandingPage() {
                 hover:shadow-lg
               "
             >
-              Create Free Account
+              {t("landing.cta.createFree")}
               <ArrowRight size={18} />
             </Link>
           </div>
@@ -323,11 +328,11 @@ export default function LandingPage() {
               <ChefHat size={14} strokeWidth={2.5} className="text-white" />
             </div>
             <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
-              SERIO
+              {t("common.appName")}
             </span>
           </div>
           <p className="text-[var(--text-sm)] text-[var(--color-neutral-400)]">
-            © 2026 Serio Ethiopian Kitchen. All rights reserved.
+            {t("landing.footer.rights")}
           </p>
         </div>
       </footer>

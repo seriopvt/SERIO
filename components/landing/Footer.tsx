@@ -1,6 +1,10 @@
+ "use client";
+
 import React from "react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 export default function Footer() {
+  const { t } = useI18n();
   return (
     <footer className="border-t border-[var(--color-neutral-100)] py-10 px-6">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
@@ -9,11 +13,11 @@ export default function Footer() {
             <span className="text-white font-bold text-xs">✕</span>
           </div>
           <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
-            SERIO
+            {t("common.appName")}
           </span>
         </div>
         <p className="text-[var(--text-sm)] text-[var(--color-neutral-400)]">
-          © 2026 Serio Ethiopian Kitchen. All rights reserved.
+          {t("landing.footer.rights")}
         </p>
       </div>
     </footer>

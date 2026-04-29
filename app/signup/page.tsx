@@ -6,9 +6,11 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight, ChefHat } from "lucide-react";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 export default function SignUpPage() {
   const router = useRouter();
+  const { t } = useI18n();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -33,7 +35,7 @@ export default function SignUpPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        setError(data.message || "Something went wrong. Please try again.");
+        setError(data.message || t("auth.signup.errorGeneric"));
         setIsLoading(false);
         return;
       }
@@ -48,13 +50,13 @@ export default function SignUpPage() {
       setIsLoading(false);
 
       if (signInRes?.error) {
-        setError("Account created but sign-in failed. Please log in manually.");
+        setError(t("auth.signup.errorSigninFailed"));
       } else {
         router.push("/home");
       }
     } catch {
       setIsLoading(false);
-      setError("Something went wrong. Please try again.");
+      setError(t("auth.signup.errorGeneric"));
     }
   }
 
@@ -78,19 +80,18 @@ export default function SignUpPage() {
             </div>
             <div>
               <span className="text-[var(--text-md)] font-bold text-white leading-none">
-                SERIO
+                {t("common.appName")}
               </span>
             </div>
           </Link>
 
           <h2 className="text-4xl font-extrabold text-white leading-tight mb-4">
-            Start Your
+            {t("auth.signup.welcomeTitle").split("\n")[0]}
             <br />
-            Culinary Journey.
+            {t("auth.signup.welcomeTitle").split("\n")[1]}
           </h2>
           <p className="text-[var(--text-md)] text-white/60 max-w-sm leading-relaxed">
-            Join thousands of home cooks discovering authentic Ethiopian recipes
-            tailored to their pantry.
+            {t("auth.signup.welcomeBody")}
           </p>
         </div>
 
@@ -98,9 +99,9 @@ export default function SignUpPage() {
         <div className="relative z-10">
           <div className="border-t border-white/10 pt-6 space-y-3">
             {[
-              "AI-powered recipe generation",
-              "Personalized to your ingredients",
-              "Traditional Ethiopian techniques",
+              t("auth.signup.feature1"),
+              t("auth.signup.feature2"),
+              t("auth.signup.feature3"),
             ].map((feature) => (
               <div key={feature} className="flex items-center gap-2.5">
                 <div className="w-5 h-5 rounded-full bg-[var(--color-brand-primary)]/20 flex items-center justify-center">
@@ -129,20 +130,20 @@ export default function SignUpPage() {
               <ChefHat size={18} strokeWidth={2.5} className="text-white" />
             </div>
             <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)]">
-              SERIO
+              {t("common.appName")}
             </span>
           </div>
 
           <h1 className="text-2xl font-extrabold text-[var(--color-neutral-900)] mb-2">
-            Create Account
+            {t("auth.signup.title")}
           </h1>
           <p className="text-[var(--text-base)] text-[var(--color-neutral-500)] mb-8">
-            Already have an account?{" "}
+            {t("auth.signup.haveAccount")}{" "}
             <Link
               href="/login"
               className="text-[var(--color-brand-primary)] font-semibold hover:underline"
             >
-              Sign in
+              {t("auth.signup.signIn")}
             </Link>
           </p>
 
@@ -161,14 +162,14 @@ export default function SignUpPage() {
             "
           >
             <GoogleIcon />
-            Continue with Google
+            {t("auth.signup.google")}
           </button>
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
             <div className="flex-1 h-px bg-[var(--color-neutral-200)]" />
             <span className="text-[var(--text-xs)] text-[var(--color-neutral-400)] font-medium uppercase tracking-wider">
-              or
+              {t("common.or")}
             </span>
             <div className="flex-1 h-px bg-[var(--color-neutral-200)]" />
           </div>
@@ -188,7 +189,7 @@ export default function SignUpPage() {
                 htmlFor="name"
                 className="block text-[var(--text-sm)] font-semibold text-[var(--color-neutral-700)] mb-1.5"
               >
-                Full Name
+                {t("auth.signup.nameLabel")}
               </label>
               <div className="relative">
                 <User
@@ -200,7 +201,7 @@ export default function SignUpPage() {
                   name="name"
                   type="text"
                   required
-                  placeholder="Abeba Tesfaye"
+                  placeholder={t("auth.signup.namePlaceholder")}
                   className="
                     w-full pl-11 pr-4 py-3
                     bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
@@ -221,7 +222,7 @@ export default function SignUpPage() {
                 htmlFor="email"
                 className="block text-[var(--text-sm)] font-semibold text-[var(--color-neutral-700)] mb-1.5"
               >
-                Email Address
+                {t("auth.signup.emailLabel")}
               </label>
               <div className="relative">
                 <Mail
@@ -233,7 +234,7 @@ export default function SignUpPage() {
                   name="email"
                   type="email"
                   required
-                  placeholder="you@example.com"
+                  placeholder={t("auth.signup.emailPlaceholder")}
                   className="
                     w-full pl-11 pr-4 py-3
                     bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
@@ -254,7 +255,7 @@ export default function SignUpPage() {
                 htmlFor="password"
                 className="text-[var(--text-sm)] font-semibold text-[var(--color-neutral-700)] block mb-1.5"
               >
-                Password
+                {t("auth.signup.passwordLabel")}
               </label>
               <div className="relative">
                 <Lock
@@ -267,7 +268,7 @@ export default function SignUpPage() {
                   type={showPassword ? "text" : "password"}
                   required
                   minLength={8}
-                  placeholder="Minimum 8 characters"
+                  placeholder={t("auth.signup.passwordPlaceholder")}
                   className="
                     w-full pl-11 pr-11 py-3
                     bg-[var(--color-surface-card)] border border-[var(--color-neutral-200)]
@@ -309,7 +310,7 @@ export default function SignUpPage() {
                 <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
               ) : (
                 <>
-                  Create Account
+                  {t("auth.signup.submit")}
                   <ArrowRight size={16} />
                 </>
               )}
@@ -318,19 +319,19 @@ export default function SignUpPage() {
 
           {/* Terms */}
           <p className="text-[var(--text-xs)] text-[var(--color-neutral-400)] text-center mt-6 leading-relaxed">
-            By creating an account, you agree to our{" "}
+            {t("auth.signup.terms.prefix")}{" "}
             <a
               href="#"
               className="text-[var(--color-neutral-600)] hover:underline"
             >
-              Terms of Service
+              {t("auth.signup.terms.tos")}
             </a>{" "}
-            and{" "}
+            {t("auth.signup.terms.and")}{" "}
             <a
               href="#"
               className="text-[var(--color-neutral-600)] hover:underline"
             >
-              Privacy Policy
+              {t("auth.signup.terms.privacy")}
             </a>
             .
           </p>

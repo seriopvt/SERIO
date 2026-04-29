@@ -3,10 +3,12 @@
 import React, { useCallback, useDeferredValue, useEffect, useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { Search, X, SlidersHorizontal } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
-const DIFFICULTIES = ["Easy", "Medium", "Hard"];
+const DIFFICULTIES = ["Easy", "Medium", "Hard"] as const;
 
 export default function FilterBar() {
+  const { t } = useI18n();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -50,7 +52,7 @@ export default function FilterBar() {
           id="catalog-search"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search recipes or ingredients…"
+          placeholder={t("recipes.filter.searchPlaceholder")}
           className="
             w-full pl-10 pr-10 py-3 rounded-full
             bg-[var(--color-surface-card)]
@@ -67,7 +69,7 @@ export default function FilterBar() {
           <button
             onClick={clearSearch}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-neutral-400)] hover:text-[var(--color-neutral-600)] transition-colors cursor-pointer"
-            aria-label="Clear search"
+            aria-label={t("recipes.filter.clearSearch")}
           >
             <X size={14} />
           </button>
@@ -98,7 +100,7 @@ export default function FilterBar() {
                 }
               `}
             >
-              {d}
+              {t(`recipes.difficulty.${d.toLowerCase()}`)}
             </button>
           );
         })}

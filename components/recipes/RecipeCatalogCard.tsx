@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Clock, Flame, Leaf, Bookmark, BookmarkCheck, Loader2, Users, ArrowRight } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 export interface RecipeCatalogCardProps {
   id: number;
@@ -23,11 +24,11 @@ export interface RecipeCatalogCardProps {
   saveLoading?: boolean;
 }
 
-const SPICE_CONFIG: Record<string, { label: string; color: string; bg: string; flames: number }> = {
-  mild:        { label: "Mild",       color: "#22c55e", bg: "rgba(34,197,94,0.12)",    flames: 1 },
-  medium:      { label: "Medium",     color: "#f59e0b", bg: "rgba(245,158,11,0.12)",   flames: 2 },
-  hot:         { label: "Hot",        color: "#f97316", bg: "rgba(249,115,22,0.12)",   flames: 3 },
-  "extra-hot": { label: "Extra Hot",  color: "#ef4444", bg: "rgba(239,68,68,0.12)",    flames: 4 },
+const SPICE_CONFIG: Record<string, { labelKey: string; color: string; bg: string; flames: number }> = {
+  mild:        { labelKey: "recipes.spice.mild",      color: "#22c55e", bg: "rgba(34,197,94,0.12)",  flames: 1 },
+  medium:      { labelKey: "recipes.spice.medium",    color: "#f59e0b", bg: "rgba(245,158,11,0.12)", flames: 2 },
+  hot:         { labelKey: "recipes.spice.hot",       color: "#f97316", bg: "rgba(249,115,22,0.12)", flames: 3 },
+  "extra-hot": { labelKey: "recipes.spice.extraHot",  color: "#ef4444", bg: "rgba(239,68,68,0.12)",  flames: 4 },
 };
 
 // Deterministic pastel gradient per recipe id
@@ -43,10 +44,10 @@ const CARD_GRADIENTS = [
 // Ethiopian-themed emoji motifs shown as decorative art
 const CARD_MOTIFS = ["🍲", "🌿", "🫘", "🌶️", "🧅", "🥘"];
 
-const DIFFICULTY_STYLE: Record<string, { dot: string; text: string }> = {
-  easy:   { dot: "#22c55e", text: "Easy" },
-  medium: { dot: "#f59e0b", text: "Medium" },
-  hard:   { dot: "#ef4444", text: "Hard" },
+const DIFFICULTY_STYLE: Record<string, { dot: string; textKey: string }> = {
+  easy:   { dot: "#22c55e", textKey: "recipes.difficulty.easy" },
+  medium: { dot: "#f59e0b", textKey: "recipes.difficulty.medium" },
+  hard:   { dot: "#ef4444", textKey: "recipes.difficulty.hard" },
 };
 
 export default function RecipeCatalogCard({
@@ -66,10 +67,11 @@ export default function RecipeCatalogCard({
   onUnsave,
   saveLoading = false,
 }: RecipeCatalogCardProps) {
+  const { t } = useI18n();
   const spice = SPICE_CONFIG[spiceLevel] ?? SPICE_CONFIG.medium;
   const diffKey = (difficulty ?? "").toLowerCase();
   const diff = DIFFICULTY_STYLE[diffKey];
-  const displayTime = time ? `${time} min` : cookTime ?? prepTime ?? null;
+  const displayTime = time ? t("recipes.card.timeMinutes", { minutes: String(time) }) : cookTime ?? prepTime ?? null;
   const gradientClass = CARD_GRADIENTS[id % CARD_GRADIENTS.length];
   const motif = CARD_MOTIFS[id % CARD_MOTIFS.length];
 
@@ -128,7 +130,7 @@ export default function RecipeCatalogCard({
             <button
               onClick={handleBookmark}
               disabled={saveLoading}
-              aria-label={isSaved ? "Remove from cookbook" : "Save to cookbook"}
+              aria-label={isSaved ? t("recipes.card.unsave") : t("recipes.card.save")}
               className="
                 absolute top-3 right-3
                 w-8 h-8 flex items-center justify-center
@@ -205,7 +207,7 @@ export default function RecipeCatalogCard({
             {diff && (
               <span className="flex items-center gap-1.5 text-[var(--text-xs)] font-semibold text-[var(--color-neutral-600)]">
                 <span className="w-2 h-2 rounded-full" style={{ background: diff.dot }} />
-                {diff.text}
+                {t(diff.textKey)}
               </span>
             )}
 
@@ -226,7 +228,7 @@ export default function RecipeCatalogCard({
             {isVegan && (
               <span className="flex items-center gap-1 text-[11px] font-semibold text-[var(--color-accent-green)]">
                 <Leaf size={11} fill="currentColor" />
-                Vegan
+                {t("recipes.card.vegan")}
               </span>
             )}
 

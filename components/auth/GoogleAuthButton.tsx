@@ -1,4 +1,5 @@
 import React from "react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface GoogleAuthButtonProps {
   onClick: () => void;
@@ -7,8 +8,10 @@ interface GoogleAuthButtonProps {
 
 export default function GoogleAuthButton({
   onClick,
-  label = "Continue with Google",
+  label,
 }: GoogleAuthButtonProps) {
+  const { t } = useI18n();
+  const resolvedLabel = label ?? t("auth.oauth.google");
   return (
     <button
       onClick={onClick}
@@ -24,7 +27,7 @@ export default function GoogleAuthButton({
       "
     >
       <GoogleIcon />
-      {label}
+      {resolvedLabel}
     </button>
   );
 }

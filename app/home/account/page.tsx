@@ -3,12 +3,20 @@ import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import AccountClient from "./AccountClient";
 import { db } from "@/lib/prisma";
+import { translations } from "@/lib/i18n/translations";
+import { cookies } from "next/headers";
+import { getTranslation, Locale } from "@/lib/i18n/translations";
 
 export const metadata = {
-  title: "Account & Settings | SERIO",
+  title: translations.en["account.metaTitle"],
 };
 
 export default async function AccountPage() {
+  const cookieStore = await cookies();
+  const cookieLocale = cookieStore.get("NEXT_LOCALE")?.value;
+  const locale: Locale = cookieLocale === "am" || cookieLocale === "en" ? (cookieLocale as Locale) : "en";
+  const t = (key: string, params?: Record<string, string>) => getTranslation(locale, key, params);
+
   const session = await auth();
 
   if (!session?.user?.id) {
@@ -32,23 +40,23 @@ export default async function AccountPage() {
     activityLogCount = activities;
     hasApiKey = Boolean(userRecord?.geminiApiKey);
   } catch (error) {
-    console.error("Failed to fetch user stats (might be missing migration):", error);
+    console.error(translations.en["account.error.statsFetchFailed"], error);
   }
 
-  const memberSince = "Joined Recently";
+  const memberSince = t("account.memberSince");
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 relative w-full">
       <h1 className="text-[var(--text-3xl)] font-bold text-[var(--color-neutral-900)] mb-2">
-        My Account
+        {t("account.title")}
       </h1>
       <p className="text-[var(--text-base)] text-[var(--color-neutral-700)] mb-8">
-        Manage your profile, data, and preferences.
+        {t("account.subtitle")}
       </p>
 
       <AccountClient
         user={{
-          name: session.user.name || "User",
+          name: session.user.name || t("common.user"),
           email: session.user.email || "",
           memberSince,
         }}

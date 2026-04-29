@@ -1,22 +1,26 @@
+ "use client";
+
 import Link from "next/link";
 import { ArrowRight, Flame } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 export default function HeroSection() {
+  const { t } = useI18n();
   return (
     <section className="pt-32 pb-20 px-6">
       <div className="max-w-6xl mx-auto text-center">
         <div className="inline-flex items-center gap-2 bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] rounded-full px-4 py-1.5 text-[var(--text-sm)] font-semibold mb-6">
           <Flame size={14} />
-          Powered by Ethiopian Culinary Tradition
+          {t("landing.badge.poweredBy")}
         </div>
 
         <h1 className="text-5xl md:text-6xl font-extrabold text-[var(--color-neutral-900)] leading-tight mb-6 max-w-3xl mx-auto">
-          Cook Authentic Ethiopian
-          <span className="text-[var(--color-brand-primary)]"> Recipes</span> from Your Pantry
+          {t("landing.hero.titleA")}
+          <span className="text-[var(--color-brand-primary)]"> {t("landing.hero.titleB")}</span> {t("landing.hero.titleC")}
         </h1>
 
         <p className="text-[var(--text-lg)] text-[var(--color-neutral-500)] max-w-xl mx-auto mb-10 leading-relaxed">
-          Enter what you have, and Serio instantly generates traditional Ethiopian recipes — personalized, authentic, and ready to cook.
+          {t("landing.hero.subtitle")}
         </p>
 
         <div className="flex items-center justify-center gap-4 mb-16">
@@ -32,7 +36,7 @@ export default function HeroSection() {
               hover:shadow-lg
             "
           >
-            Start Cooking Free
+            {t("landing.cta.startFree")}
             <ArrowRight size={18} />
           </Link>
           <a
@@ -47,7 +51,7 @@ export default function HeroSection() {
               transition-all hover:shadow-[var(--shadow-sm)]
             "
           >
-            See How It Works
+            {t("landing.cta.seeHow")}
           </a>
         </div>
 
@@ -56,19 +60,19 @@ export default function HeroSection() {
             <div className="flex items-center gap-3 mb-6">
               <div className="flex-1 flex items-center bg-[var(--color-neutral-50)] rounded-full px-5 py-3.5 border border-[var(--color-neutral-100)]">
                 <span className="text-[var(--color-neutral-300)] text-[var(--text-base)]">
-                  e.g. teff flour, berbere, garlic, onions...
+                  {t("landing.mock.placeholder")}
                 </span>
               </div>
               <div className="bg-[var(--color-brand-primary)] text-white px-6 py-3.5 rounded-full text-[var(--text-base)] font-semibold">
-                Inspire Me
+                {t("landing.mock.inspire")}
               </div>
             </div>
 
             <div className="grid grid-cols-3 gap-4 text-left">
               {[
-                { name: "Doro Wat", time: "2h", rating: "4.8" },
-                { name: "Teff Injera", time: "24h", rating: "4.7" },
-                { name: "Misir Wot", time: "45m", rating: "4.8" },
+                { name: t("landing.mock.card1.name"), time: t("landing.mock.card1.time"), rating: t("landing.mock.card1.rating") },
+                { name: t("landing.mock.card2.name"), time: t("landing.mock.card2.time"), rating: t("landing.mock.card2.rating") },
+                { name: t("landing.mock.card3.name"), time: t("landing.mock.card3.time"), rating: t("landing.mock.card3.rating") },
               ].map((recipe) => (
                 <div
                   key={recipe.name}

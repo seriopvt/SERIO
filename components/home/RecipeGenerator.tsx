@@ -16,6 +16,7 @@ import {
   Heart,
 } from "lucide-react";
 import { Card, Badge, Button } from "@/components/ui";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 // ── Types (mirrors lib/gemini.ts) ─────────────────────────────────────
 
@@ -37,34 +38,45 @@ interface GeneratedRecipe {
 
 const SPICE_CONFIG: Record<
   string,
-  { label: string; color: string; flames: number }
+  { labelKey: string; color: string; flames: number }
 > = {
-  mild: { label: "Mild", color: "var(--color-accent-green)", flames: 1 },
-  medium: { label: "Medium", color: "var(--color-accent-amber)", flames: 2 },
-  hot: { label: "Hot", color: "var(--color-accent-orange)", flames: 3 },
+  mild: { labelKey: "recipes.spice.mild", color: "var(--color-accent-green)", flames: 1 },
+  medium: { labelKey: "recipes.spice.medium", color: "var(--color-accent-amber)", flames: 2 },
+  hot: { labelKey: "recipes.spice.hot", color: "var(--color-accent-orange)", flames: 3 },
   "extra-hot": {
-    label: "Extra Hot",
+    labelKey: "recipes.spice.extraHot",
     color: "var(--color-accent-red)",
     flames: 4,
   },
 };
 
-const COMMON_INGREDIENTS = [
-  "Berbere",
-  "Teff",
-  "Red Lentils",
-  "Chickpeas",
-  "Niter Kibbeh",
-  "Red Onions",
-  "Garlic",
-  "Shiro Powder",
-  "Spinach",
-  "Tomatoes",
+type CommonIngredient = {
+  value: string; // canonical value sent to the API
+  labelKey: string; // translated label key
+};
+
+const COMMON_INGREDIENTS: CommonIngredient[] = [
+  { value: "Berbere", labelKey: "home.generator.commonIngredient.berbere" },
+  { value: "Teff", labelKey: "home.generator.commonIngredient.teff" },
+  { value: "Red Lentils", labelKey: "home.generator.commonIngredient.redLentils" },
+  { value: "Chickpeas", labelKey: "home.generator.commonIngredient.chickpeas" },
+  { value: "Niter Kibbeh", labelKey: "home.generator.commonIngredient.niterKibbeh" },
+  { value: "Red Onions", labelKey: "home.generator.commonIngredient.redOnions" },
+  { value: "Garlic", labelKey: "home.generator.commonIngredient.garlic" },
+  { value: "Shiro Powder", labelKey: "home.generator.commonIngredient.shiroPowder" },
+  { value: "Spinach", labelKey: "home.generator.commonIngredient.spinach" },
+  { value: "Tomatoes", labelKey: "home.generator.commonIngredient.tomatoes" },
 ];
+
+const COMMON_INGREDIENT_LABEL_KEY_BY_VALUE_LOWER: Record<string, string> =
+  Object.fromEntries(
+    COMMON_INGREDIENTS.map(({ value, labelKey }) => [value.toLowerCase(), labelKey])
+  );
 
 // ── Main Component ────────────────────────────────────────────────────
 
 export default function RecipeGenerator() {
+  const { t } = useI18n();
   const [inputValue, setInputValue] = useState("");
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [isVegan, setIsVegan] = useState(false);
@@ -124,13 +136,13 @@ export default function RecipeGenerator() {
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.error ?? "Something went wrong");
+        throw new Error(data.error ?? t("home.generator.error.generic"));
       }
 
       const data: GeneratedRecipe = await res.json();
       setRecipe(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Unexpected error");
+      setError(err instanceof Error ? err.message : t("home.generator.error.unexpected"));
     } finally {
       setLoading(false);
     }
@@ -152,7 +164,7 @@ export default function RecipeGenerator() {
           setSaveStatus("saved"); // Already saved
           return;
         }
-        throw new Error("Failed to save");
+        throw new Error(t("home.generator.error.saveFailed"));
       }
 
       setSaveStatus("saved");
@@ -165,16 +177,20 @@ export default function RecipeGenerator() {
 
   const spice = recipe ? (SPICE_CONFIG[recipe.spiceLevel] ?? SPICE_CONFIG.medium) : null;
 
+  const ingredientLabel = (value: string) => {
+    const key = COMMON_INGREDIENT_LABEL_KEY_BY_VALUE_LOWER[value.toLowerCase()];
+    return key ? t(key) : value;
+  };
+
   return (
     <div className="mb-8 space-y-5">
       {/* ── Input Card ── */}
       <Card padding="lg">
         <h3 className="text-[var(--text-xl)] font-bold text-[var(--color-neutral-900)] text-center mb-1">
-          What&apos;s in your pantry?
+          {t("home.generator.title")}
         </h3>
         <p className="text-[var(--text-base)] text-[var(--color-neutral-400)] text-center mb-6">
-          Enter your ingredients to generate a traditional Ethiopian recipe
-          instantly.
+          {t("home.generator.subtitle")}
         </p>
 
         {/* Ingredient Chips */}
@@ -191,11 +207,11 @@ export default function RecipeGenerator() {
                   text-[var(--text-sm)] font-semibold
                 "
               >
-                {ing}
+                {ingredientLabel(ing)}
                 <button
                   onClick={() => removeIngredient(idx)}
                   className="hover:opacity-70 transition-opacity cursor-pointer"
-                  aria-label={`Remove ${ing}`}
+                  aria-label={`${t("common.remove")} ${ingredientLabel(ing)}`}
                 >
                   <X size={12} />
                 </button>
@@ -212,7 +228,7 @@ export default function RecipeGenerator() {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
             onBlur={() => addIngredient(inputValue)}
-            placeholder="e.g. teff, berbere, garlic... (press Enter or comma to add)"
+            placeholder={t("home.generator.inputPlaceholder")}
             className="
               flex-1 px-5 py-3.5 rounded-full
               bg-[var(--color-neutral-50)]
@@ -234,12 +250,12 @@ export default function RecipeGenerator() {
             {loading ? (
               <>
                 <Loader2 size={16} className="animate-spin" />
-                Cooking…
+                {t("home.generator.button.cooking")}
               </>
             ) : (
               <>
                 <Sparkles size={16} />
-                Inspire Me
+                {t("home.generator.button.inspire")}
               </>
             )}
           </Button>
@@ -260,7 +276,7 @@ export default function RecipeGenerator() {
             `}
           >
             <Leaf size={14} />
-            Vegan
+            {t("home.generator.pref.vegan")}
           </button>
           <button
             onClick={() => setIsSpicy((v) => !v)}
@@ -275,26 +291,26 @@ export default function RecipeGenerator() {
             `}
           >
             <Flame size={14} />
-            Spicy
+            {t("home.generator.pref.spicy")}
           </button>
         </div>
 
         {/* Common Ingredient Badges */}
         <div className="text-center">
           <p className="text-[var(--text-xs)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider mb-3">
-            Common Ethiopian Ingredients
+            {t("home.generator.commonIngredients")}
           </p>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {COMMON_INGREDIENTS.map((ing) => (
               <Badge
-                key={ing}
-                label={ing}
-                showPlus={!ingredients.some((i) => i.toLowerCase() === ing.toLowerCase())}
+                key={ing.value}
+                label={t(ing.labelKey)}
+                showPlus={!ingredients.some((i) => i.toLowerCase() === ing.value.toLowerCase())}
                 onClick={() =>
                   setIngredients((prev) => {
-                    if (prev.some((i) => i.toLowerCase() === ing.toLowerCase()))
+                    if (prev.some((i) => i.toLowerCase() === ing.value.toLowerCase()))
                       return prev;
-                    return [...prev, ing];
+                    return [...prev, ing.value];
                   })
                 }
               />
@@ -356,7 +372,7 @@ export default function RecipeGenerator() {
             <button
               onClick={() => setRecipe(null)}
               className="text-[var(--color-neutral-300)] hover:text-[var(--color-neutral-500)] transition-colors cursor-pointer"
-              aria-label="Dismiss recipe"
+              aria-label={t("home.generator.dismiss")}
             >
               <X size={18} />
             </button>
@@ -367,12 +383,12 @@ export default function RecipeGenerator() {
             {/* Time */}
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-neutral-100)] text-[var(--color-neutral-600)] text-[var(--text-sm)]">
               <Clock size={13} />
-              {recipe.time} min
+              {t("home.generator.timeMinutes", { minutes: String(recipe.time) })}
             </span>
             {/* Servings */}
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-neutral-100)] text-[var(--color-neutral-600)] text-[var(--text-sm)]">
               <Users size={13} />
-              {recipe.servings} servings
+              {t("home.generator.servings", { servings: String(recipe.servings) })}
             </span>
             {/* Spice Level */}
             <span
@@ -385,13 +401,13 @@ export default function RecipeGenerator() {
               {Array.from({ length: spice?.flames ?? 1 }).map((_, i) => (
                 <Flame key={i} size={12} />
               ))}
-              {spice?.label}
+              {spice ? t(spice.labelKey) : null}
             </span>
             {/* Vegan */}
             {recipe.isVegan && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 text-[var(--color-accent-green)] text-[var(--text-sm)] font-semibold">
                 <Leaf size={13} />
-                Vegan
+                {t("home.generator.pref.vegan")}
               </span>
             )}
           </div>
@@ -401,7 +417,7 @@ export default function RecipeGenerator() {
             <div>
               <h4 className="flex items-center gap-2 text-[var(--text-base)] font-bold text-[var(--color-neutral-900)] mb-3">
                 <ChefHat size={16} className="text-[var(--color-brand-primary)]" />
-                Ingredients
+                {t("home.generator.ingredientsTitle")}
               </h4>
               <ul className="space-y-2">
                 {recipe.ingredients.map((ing, i) => (
@@ -417,7 +433,7 @@ export default function RecipeGenerator() {
             <div>
               <h4 className="flex items-center gap-2 text-[var(--text-base)] font-bold text-[var(--color-neutral-900)] mb-3">
                 <Sparkles size={16} className="text-[var(--color-brand-primary)]" />
-                Instructions
+                {t("home.generator.instructionsTitle")}
               </h4>
               <ol className="space-y-3">
                 {recipe.steps.map((step, i) => (
@@ -449,7 +465,7 @@ export default function RecipeGenerator() {
             ">
               <Lightbulb size={16} className="text-[var(--color-brand-primary)] shrink-0 mt-0.5" />
               <p className="text-[var(--text-base)] text-[var(--color-neutral-700)] leading-relaxed">
-                <span className="font-semibold text-[var(--color-brand-primary)]">Chef&apos;s Tip: </span>
+                <span className="font-semibold text-[var(--color-brand-primary)]">{t("home.generator.chefTipPrefix")}</span>
                 {recipe.tip}
               </p>
             </div>
@@ -464,7 +480,7 @@ export default function RecipeGenerator() {
               disabled={loading}
             >
               <Sparkles size={14} />
-              Regenerate
+              {t("home.generator.regenerate")}
             </Button>
             
             {recipe.id && (
@@ -476,13 +492,13 @@ export default function RecipeGenerator() {
                 className={saveStatus === "saved" ? "!bg-[var(--color-success)] !shadow-none" : ""}
               >
                 {saveStatus === "saving" ? (
-                  <><Loader2 size={14} className="animate-spin" /> Saving...</>
+                  <><Loader2 size={14} className="animate-spin" /> {t("home.generator.save.saving")}</>
                 ) : saveStatus === "saved" ? (
-                  <><Heart size={14} className="fill-white" /> Saved to Cookbook</>
+                  <><Heart size={14} className="fill-white" /> {t("home.generator.save.saved")}</>
                 ) : saveStatus === "error" ? (
-                  "Error Saving"
+                  t("home.generator.save.error")
                 ) : (
-                  <><BookOpen size={14} /> Save to Cookbook</>
+                  <><BookOpen size={14} /> {t("home.generator.save.cta")}</>
                 )}
               </Button>
             )}

@@ -70,8 +70,8 @@ export default function Sidebar({
   hasApiKey = true,
 }: SidebarProps) {
   const { t } = useI18n();
-  const initials = userName ? getInitials(userName) : "??";
-  const displayName = userName ? getDisplayName(userName) : userEmail || "User";
+  const initials = userName ? getInitials(userName) : t("common.unknownInitials");
+  const displayName = userName ? getDisplayName(userName) : userEmail || t("common.user");
   const pathname = usePathname();
   const accountActive = pathname.startsWith("/home/account");
   const showDot = !hasApiKey;
@@ -95,7 +95,7 @@ export default function Sidebar({
           </div>
           <div>
             <h1 className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)] leading-none">
-              SERIO
+              {t("common.appName")}
             </h1>
             <p className="text-[10px] text-[var(--color-neutral-600)] tracking-wider uppercase">
               {t("sidebar.ethiopiankitchen")}
@@ -150,7 +150,7 @@ export default function Sidebar({
         {/* Account icon button — with notification dot if no API key */}
         <Link
           href="/home/account"
-          title={showDot ? "Add your Gemini API key — click to set up" : "Account"}
+          title={showDot ? t("sidebar.apiKeyCta") : t("sidebar.account")}
           className={`
             relative w-9 h-9 flex-shrink-0 flex items-center justify-center
             rounded-[var(--radius-xl)]
@@ -167,7 +167,7 @@ export default function Sidebar({
           {showDot && (
             <span
               className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 border-2 border-[var(--color-surface-card)] animate-pulse"
-              aria-label="Action required"
+              aria-label={t("sidebar.actionRequired")}
             />
           )}
         </Link>

@@ -1,7 +1,11 @@
+ "use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 export default function Navbar() {
+  const { t } = useI18n();
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--color-neutral-100)]">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -12,10 +16,10 @@ export default function Navbar() {
           </div>
           <div>
             <span className="text-[var(--text-base)] font-bold text-[var(--color-neutral-900)] leading-none">
-              SERIO
+              {t("common.appName")}
             </span>
             <span className="text-[10px] text-[var(--color-neutral-400)] tracking-wider uppercase ml-1.5">
-              Ethiopian Kitchen
+              {t("common.appTagline")}
             </span>
           </div>
         </Link>
@@ -26,19 +30,19 @@ export default function Navbar() {
             href="#features"
             className="text-[var(--text-base)] text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-900)] transition-colors"
           >
-            Features
+            {t("landing.nav.features")}
           </a>
           <a
             href="#how-it-works"
             className="text-[var(--text-base)] text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-900)] transition-colors"
           >
-            How It Works
+            {t("landing.nav.howItWorks")}
           </a>
           <a
             href="#testimonials"
             className="text-[var(--text-base)] text-[var(--color-neutral-500)] hover:text-[var(--color-neutral-900)] transition-colors"
           >
-            Testimonials
+            {t("landing.nav.testimonials")}
           </a>
         </div>
 
@@ -48,7 +52,7 @@ export default function Navbar() {
             href="/login"
             className="text-[var(--text-base)] font-semibold text-[var(--color-neutral-600)] hover:text-[var(--color-neutral-900)] transition-colors px-4 py-2"
           >
-            Log In
+            {t("landing.nav.login")}
           </Link>
           <Link
             href="/signup"
@@ -61,7 +65,7 @@ export default function Navbar() {
               transition-colors shadow-[var(--shadow-brand)]
             "
           >
-            Get Started
+            {t("landing.nav.getStarted")}
             <ArrowRight size={16} />
           </Link>
         </div>

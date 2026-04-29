@@ -3,10 +3,12 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { BookOpen, Loader2 } from "lucide-react";
 import RecipeCatalogCard, { RecipeCatalogCardProps } from "@/components/recipes/RecipeCatalogCard";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 type SavedRecipe = Omit<RecipeCatalogCardProps, "onSave" | "onUnsave" | "saveLoading" | "isSaved">;
 
 export default function CookbookPage() {
+  const { locale, t } = useI18n();
   const [recipes, setRecipes] = useState<SavedRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -17,13 +19,13 @@ export default function CookbookPage() {
     setError(null);
     fetch("/api/recipes/saved")
       .then((r) => {
-        if (!r.ok) throw new Error("Failed to load cookbook");
+        if (!r.ok) throw new Error(t("cookbook.error.loadFailed"));
         return r.json();
       })
       .then((data) => setRecipes(data.results ?? []))
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     fetchSaved();
@@ -44,10 +46,10 @@ export default function CookbookPage() {
       {/* Page header */}
       <div className="mb-8">
         <h1 className="text-[var(--text-3xl)] font-extrabold text-[var(--color-neutral-900)] leading-tight mb-1">
-          My Cookbook
+          {t("cookbook.title")}
         </h1>
         <p className="text-[var(--text-base)] text-[var(--color-neutral-500)]">
-          All the recipes you&apos;ve saved — your personal Ethiopian kitchen collection.
+          {t("cookbook.subtitle")}
         </p>
       </div>
 
@@ -70,10 +72,10 @@ export default function CookbookPage() {
             <BookOpen size={28} className="text-[var(--color-brand-primary)]" />
           </div>
           <h3 className="font-bold text-[var(--text-lg)] text-[var(--color-neutral-700)] mb-2">
-            Your cookbook is empty
+            {t("cookbook.emptyTitle")}
           </h3>
           <p className="text-[var(--text-base)] text-[var(--color-neutral-400)] mb-6 max-w-xs mx-auto">
-            Browse the recipe catalog and hit the bookmark icon to save recipes here.
+            {t("cookbook.emptySubtitle")}
           </p>
           <a
             href="/home/recipes"
@@ -86,7 +88,7 @@ export default function CookbookPage() {
               transition-colors shadow-[var(--shadow-brand)]
             "
           >
-            Browse Recipes
+            {t("cookbook.browse")}
           </a>
         </div>
       )}
@@ -95,7 +97,10 @@ export default function CookbookPage() {
       {!loading && !error && recipes.length > 0 && (
         <>
           <p className="text-[var(--text-sm)] text-[var(--color-neutral-400)] mb-4">
-            {recipes.length} saved recipe{recipes.length !== 1 ? "s" : ""}
+            {t("cookbook.savedCount", {
+              count: String(recipes.length),
+              suffix: recipes.length !== 1 ? "s" : "",
+            })}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {recipes.map((recipe) => (

@@ -1,5 +1,8 @@
+ "use client";
+
 import React from "react";
 import { Star } from "lucide-react";
+import { useI18n } from "@/lib/i18n/I18nContext";
 
 interface TestimonialCardProps {
   quote: string;
@@ -46,33 +49,34 @@ function TestimonialCard({ quote, name, role }: TestimonialCardProps) {
 }
 
 export default function TestimonialsSection() {
+  const { t } = useI18n();
   return (
     <section id="testimonials" className="py-20 px-6">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-14">
           <p className="text-[var(--text-sm)] font-semibold text-[var(--color-brand-primary)] uppercase tracking-wider mb-2">
-            Testimonials
+            {t("landing.testimonials.kicker")}
             </p>
           <h2 className="text-3xl md:text-4xl font-extrabold text-[var(--color-neutral-900)] mb-4">
-            Loved by Home Cooks
+            {t("landing.testimonials.title")}
           </h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           <TestimonialCard
-            quote="Serio helped me reconnect with my grandmother's recipes. The AI suggestions are incredibly accurate!"
-            name="Meron K."
-            role="Home Cook"
+            quote={t("landing.testimonial.1.quote")}
+            name={t("landing.testimonial.1.name")}
+            role={t("landing.testimonial.1.role")}
           />
           <TestimonialCard
-            quote="I never knew I could make Doro Wat with what I already had in my pantry. This app is a game changer."
-            name="Daniel A."
-            role="Food Enthusiast"
+            quote={t("landing.testimonial.2.quote")}
+            name={t("landing.testimonial.2.name")}
+            role={t("landing.testimonial.2.role")}
           />
           <TestimonialCard
-            quote="The chef's tips alone are worth it. I've learned techniques I couldn't find anywhere else online."
-            name="Sara T."
-            role="Pro Member"
+            quote={t("landing.testimonial.3.quote")}
+            name={t("landing.testimonial.3.name")}
+            role={t("landing.testimonial.3.role")}
           />
         </div>
       </div>
