@@ -1,4 +1,4 @@
-import { PrismaClient } from "../prisma/app/generated/prisma/";
+import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 // This prevents TypeScript from complaining about the global variable
